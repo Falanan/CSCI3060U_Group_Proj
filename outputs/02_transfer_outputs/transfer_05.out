@@ -1,5 +1,5 @@
 Welcome to the banking system.
 Enter session type: user
 Login accepted. Welcome, Xuan Zheng.
-Transfer successful. New balance: $900.00 (Account 00003), $2,700.00 (Account 00006).
+Error: Invalid transfer amount.
 Session terminated.

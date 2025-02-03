@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: user
+Login accepted. Welcome, Xuan Zheng.
+Error: Missing required fields for transfer. Please provide both source and destination account numbers and the amount.
+Session terminated.
