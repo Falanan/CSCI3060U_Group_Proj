@@ -1,5 +1,5 @@
 Welcome to the banking system.
-Enter session type: user
-Login accepted. Welcome, Riddhi More.
+Enter session type: standard
+Enter account holder name: Riddhi_More
 Error: Maximum paybill limit exceeded. You can paybill up to $2000.00 in this session.
 Session terminated.

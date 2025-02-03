@@ -1,5 +1,5 @@
 Welcome to the banking system.
-Enter session type: user
-Login accepted. Welcome, Xuan Zheng.
+Enter session type: standard
+Enter account holder name: Xuan_Zheng
 Error: Insufficient funds to pay the bill. Available balance: $1,400.00.
 Session terminated.

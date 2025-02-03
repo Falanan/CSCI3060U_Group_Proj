@@ -1,5 +1,5 @@
 Welcome to the banking system.
-Enter session type: user
-Login accepted. Welcome, Jeremy Bradbury.
+Enter session type: standard
+Enter account holder name: Jeremy_Bradbury
 Error: Your account is disabled. Please use an available account to paybill.
 Session terminated.
