@@ -19,16 +19,16 @@ All test cases are systematically **organized in directories** for clarity.
 ## **Submission Contents**
 This repository includes the following required components:
 
-1. **📄 List of Test Cases (`test_cases.docx`)**  
+1. **List of Test Cases (`test_cases.docx`)**  
    - A **table listing all test cases** with their intended purpose.  
    - Ensures all required behaviors and constraints are tested.  
 
-2. **📂 Test Files**  
+2. **Test Files**  
    - **Test input files (`.inp`)** for each scenario.  
    - **Expected output files (`.out`, `.etf`)** for verification.  
    - Files are organized by transaction type.  
 
-3. **📄 Test Plan (`test_plan.docx`)**  
+3. **Test Plan (`test_plan.docx`)**  
    - **Explains how tests are structured** in directories.  
    - **Describes how tests will be executed** using shell scripts.  
    - **Details how results are stored and compared** with future runs.  
