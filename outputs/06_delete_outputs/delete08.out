@@ -1,5 +1,5 @@
 Welcome to the banking system
 Enter session type: admin
-Account deletion successful.
+Account "27182" for "Elon_Trust" successfully deleted.
 Error: Transactions are not allowed on a deleted account.
 Session terminated

@@ -1,4 +1,4 @@
 Welcome to the banking system
 Enter session type: admin
-Error: Account number "4527182" does not match the account holder's name "Elon Trust".
+Error: Account number "4527182" does not match the account holder's name "Elon_Trust".
 Session terminated

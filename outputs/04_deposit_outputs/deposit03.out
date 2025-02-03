@@ -1,4 +1,5 @@
 Welcome to the banking system
-Enter session type: user
+Enter session type: standard
+Enter account holder name: Dev_Thaker
 Error: Only admins can deposit funds into other accounts.
 Session terminated
