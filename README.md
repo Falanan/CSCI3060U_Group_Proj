@@ -19,7 +19,7 @@ All test cases are systematically **organized in directories** for clarity.
 ## **Submission Contents**
 This repository includes the following required components:
 
-1. **List of Test Cases (`test_cases.docx`)**  
+1. **List of Test Cases (`CSCI3060U-Phase I-Test Case List.pdf`)**  
    - A **table listing all test cases** with their intended purpose.  
    - Ensures all required behaviors and constraints are tested.  
 
@@ -28,7 +28,7 @@ This repository includes the following required components:
    - **Expected output files (`.out`, `.etf`)** for verification.  
    - Files are organized by transaction type.  
 
-3. **Test Plan (`test_plan.docx`)**  
+3. **Test Plan (`CSCI3060U-Phase I-Test Plan.pdf`)**  
    - **Explains how tests are structured** in directories.  
    - **Describes how tests will be executed** using shell scripts.  
    - **Details how results are stored and compared** with future runs.  
