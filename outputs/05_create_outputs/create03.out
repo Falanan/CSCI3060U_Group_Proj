@@ -1,7 +1,4 @@
-login
-user
-deposit
-Elon Trust
-2889343
-1000
-logout
+Welcome to the banking system
+Enter session type: admin
+Error: Initial balance cannot be blank.
+Session terminated

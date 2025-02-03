@@ -1,4 +1,5 @@
-Login successful.
+Welcome to the banking system
+Enter session type: admin
 Account deletion successful.
 Error: Transactions are not allowed on a deleted account.
-Logout successful.
+Session terminated

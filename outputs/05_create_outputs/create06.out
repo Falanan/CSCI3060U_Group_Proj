@@ -1,3 +1,4 @@
-Login successful.
+Welcome to the banking system
+Enter session type: admin
 Error:  Account holder name cannot be more than 20 characters.
-Logout successful.
+Session terminated
