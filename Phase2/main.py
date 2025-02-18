@@ -237,14 +237,27 @@ def banking_system():
 
             # Prompt for the account holder's name.
             account_holder_name = input("Enter account holder name: ").strip()
-            # Prompt for the account number.
+
+            # Preliminary check: verify the account holder name exists.
+            found_user = None
+            for user in USERS.values():
+                if user.user_name.strip().lower() == account_holder_name.lower():
+                    found_user = user
+                    break
+
+            if found_user is None:
+                print("Error: Account holder name not found.")
+                continue
+
+            # Now prompt for the account number.
             account_number = input("Enter account number: ").strip()
 
             # Create a Disable transaction instance and process it.
+            from disable import Disable
             disable_txn = Disable(session_type, account_holder_name, account_number, USERS)
             disable_txn.process_disable()
 
-            # Log the transaction only if processing succeeded.
+            # Log the transaction output if the processing succeeded.
             transaction_output = disable_txn.return_transaction_output()
             if transaction_output:
                 log_transaction(transaction_output)

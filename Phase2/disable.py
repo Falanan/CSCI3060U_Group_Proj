@@ -28,18 +28,19 @@ class Disable:
         self.provided_account_number = provided_account_number
         self.users = users
         self.check = Check()
-        self.user = None  # This will be set to the actual User object after lookup.
+        self.user = None  # Will hold the actual User object if found
 
     def process_disable(self):
-        """Performs checks and disables the account if all validations pass."""
-        # Check admin privileges
+        """Performs validations and disables the account if all checks pass."""
+        # Check admin privileges.
         if self.userType != "admin":
             print("Error: Disable transaction requires admin privileges.")
             return
 
-        # Lookup user by the provided account holder name.
+        # 1. Check if an account with the provided name exists.
         found_user = None
         for user in self.users.values():
+            # Compare names ignoring extra spaces and case.
             if user.user_name.strip().lower() == self.provided_account_holder.lower():
                 found_user = user
                 break
@@ -48,19 +49,20 @@ class Disable:
             print("Error: Account holder name not found.")
             return
 
-        # Check if the provided account number matches the account found.
+        # 2. Now check if the provided account number matches that account.
         if found_user.account_number != self.provided_account_number:
             print("Error: Provided account number does not match the account holder name.")
             return
 
-        self.user = found_user  # Set the user for future use
+        # Set the found user.
+        self.user = found_user
 
-        # Check if the account is already disabled.
+        # 3. Check if the account is already disabled.
         if not self.check.availability_check(self.user):
             print(f"Error: Account {self.user.account_number} is already disabled.")
             return
 
-        # Disable the account by setting its availability to "D".
+        # 4. Disable the account.
         self.user.availability = "D"
         print(f"Account {self.user.account_number} ({self.user.user_name}) has been disabled.")
 
