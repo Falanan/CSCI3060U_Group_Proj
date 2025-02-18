@@ -270,7 +270,6 @@ def banking_system():
             if transaction_output:
                 log_transaction(transaction_output)
 
-
         else:
             print("Invalid command.")
 
