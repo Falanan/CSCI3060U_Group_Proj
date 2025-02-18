@@ -36,6 +36,7 @@ from changeplan import ChangePlan
 from disable import Disable
 from login import Login
 from withdrawal import Withdrawal
+from logout import Logout
 
 class User:
     def __init__(self, account_number, user_name, availability, balance):
@@ -269,6 +270,18 @@ def banking_system():
             transaction_output = disable_txn.return_transaction_output()
             if transaction_output:
                 log_transaction(transaction_output)
+
+        elif command == "logout":
+            # Create a Logout transaction instance.
+            logout_txn = Logout(logged_in, session_type, current_user)
+            
+            # Process logout; if successful, log the transaction and clear session state.
+            if logout_txn.process_logout():
+                transaction_output = logout_txn.return_transaction_output()
+                log_transaction(transaction_output)
+                logged_in = False
+                current_user = None
+                session_type = None
 
         else:
             print("Invalid command.")
