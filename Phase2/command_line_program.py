@@ -2,6 +2,7 @@ def banking_system():
     logged_in = False
     accounts = {
         "Xuan_Zheng": {"00003": 1200.0},
+        "Dev_Thaker": {"00001": 500.0}
     }
     
     while True:
