@@ -34,6 +34,8 @@ from deposit import Deposit
 from create import Create
 from changeplan import ChangePlan
 from disable import Disable
+from login import Login
+from withdrawal import Withdrawal
 
 class User:
     def __init__(self, account_number, user_name, availability, balance):
@@ -92,6 +94,8 @@ def banking_system():
                 
                 if found_user:
                     current_user = found_user
+                    login_instance = Login(session_type, current_user)
+                    login_instance.process_login()
                     logged_in = True
                 else:
                     print("Error: Invalid account holder name.")
@@ -108,17 +112,21 @@ def banking_system():
                 print("You are not logged in.")
         
         elif command == "withdrawal":
-            if not logged_in:
-                print("Error: You must be logged in to perform transactions.")
+            if not logged_in or not current_user:
+                print("Error: You must be logged in to withdraw.")
                 continue
             
-            amount = float(input("Enter withdrawal amount: "))
-            if session_type == "admin" or (current_user and current_user.balance >= amount):
-                if current_user:
-                    current_user.balance -= amount
-                print(f"Withdrawal successful. New balance: ${current_user.balance:.2f}" if current_user else "Admin withdrawal successful.")
-            else:
-                print("Error: Insufficient balance.")
+            amount = input("Enter withdrawal amount: ").strip()
+            try:
+                amount = float(amount)
+            except ValueError:
+                print("Error: Invalid withdrawal amount.")
+                continue
+            
+            withdrawal_instance = Withdrawal(current_user, amount)
+            withdrawal_instance.process_withdrawal()
+            withdrawal_output = withdrawal_instance.return_transaction_output()
+            log_transaction(withdrawal_output)
         
         elif command == "transfer":
             if not logged_in:

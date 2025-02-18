@@ -1,4 +1,4 @@
 
-.DS_Store
+*.DS_Store
 Phase2/daily_transaction_file.txt
 /Phase2/__pycache__
