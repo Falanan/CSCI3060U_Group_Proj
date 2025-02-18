@@ -33,7 +33,7 @@ class Check:
             "CQ": "20000",
             "FI": "30000"
         }
-        return COMPANY_ACCOUNTS.get(company, None)
+        return COMPANY_ACCOUNTS.get(company)
 
     def invalid_character_check(self, value):
         try:

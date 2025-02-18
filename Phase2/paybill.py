@@ -100,4 +100,15 @@ class Paybill:
 
         print(transaction_output)
         print(end_session_output)
+    
+    def return_transaction_output(self, company_id):
+        formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
+        transaction_output = (
+            f"03_{formatted_username}_"
+            f"{self.user.account_number:>5}_"
+            f"{float(self.amount):.2f}_"
+            f"{company_id}"
+        )
+        return transaction_output
+
 

@@ -1,3 +1,31 @@
+"""
+Main Banking System
+
+Description:
+This program simulates a banking system that allows users to perform transactions such as withdrawals, 
+transfers, and bill payments. Users must log in before performing transactions. The system supports 
+both standard and admin sessions, where the admin has special privileges such as overriding account 
+limits and accessing all user accounts.
+
+Input Files:
+- None (User accounts are hardcoded into the program)
+
+Output Files:
+- daily_transaction_file.txt: Stores a record of all transactions performed during a session.
+
+How to Run:
+1. Start the program.
+2. Enter "login" to authenticate.
+   - Admin users enter "admin" to log in with full access.
+   - Standard users enter their username to log in.
+3. After login, enter one of the following commands:
+   - "withdrawal" to withdraw funds from the logged-in account.
+   - "transfer" to transfer funds between accounts.
+   - "paybill" to pay a bill to a predefined company.
+   - "logout" to end the session and save the transactions.
+4. Transactions are logged in the output file upon execution.
+"""
+
 from transfer import Transfer
 from paybill import Paybill
 from check import Check
@@ -22,6 +50,13 @@ USERS = {
     "00008": User("00008", "Eve Adams", "A", 300.00),
 }
 
+# For transaction file
+TRANSACTION_FILE = "daily_transaction_file.txt"
+
+def log_transaction(transaction):
+    with open(TRANSACTION_FILE, "a") as file:
+        file.write(transaction + "\n")
+
 def banking_system():
     logged_in = False
     current_user = None
@@ -40,7 +75,6 @@ def banking_system():
             
             session_type = input("Enter session type: ").strip().lower()
             if session_type == "admin":
-                # print("Admin login successful.")
                 logged_in = True
                 current_user = None
             else:
@@ -59,6 +93,7 @@ def banking_system():
         
         elif command == "logout":
             if logged_in:
+                log_transaction("00_________________________00000_00000.00__")
                 print("Logout successful.")
                 logged_in = False
                 current_user = None
@@ -93,6 +128,10 @@ def banking_system():
                 if receiver_account in USERS and receiver_account != sender_account:
                     transfer = Transfer(session_type, USERS[sender_account], USERS[receiver_account], amount)
                     transfer.process_transfer()
+                    # Write transaction output to log file
+                    transaction_output = transfer.return_transaction_output()
+                    log_transaction(transaction_output)
+                    
                 else:
                     print("Error: Invalid target account number.")
             else:
@@ -110,11 +149,16 @@ def banking_system():
             if session_type == "admin" or (current_user and check.sender_account_match(current_user, sender_account)):
                 paybill = Paybill(session_type, USERS[sender_account], company, amount)
                 paybill.process_paybill()
+                # Write transaction output to log file
+                company_id = paybill.check.company_id_check(company)
+                transaction_output = paybill.return_transaction_output(company_id)
+                log_transaction(transaction_output)       
+                
             else:
                 print("Error: You must be logged in as a standard user to pay bills.")
         
         else:
-            print("Invalid command. Available commands: login, logout, withdrawal, transfer, paybill")
+            print("Invalid command.")
 
 if __name__ == "__main__":
     banking_system()

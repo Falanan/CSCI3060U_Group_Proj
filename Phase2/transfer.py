@@ -96,8 +96,21 @@ class Transfer:
             f"{float(self.amount):.2f}_"
             f"{self.user2.account_number}"
         )
-        end_session_output = "00_________________________00000_00000.00__"
 
         print(transaction_output)
+        
+        end_session_output = "00_________________________00000_00000.00__"
         print(end_session_output)
+        
+    def return_transaction_output(self):
+        formatted_username = self.user1.user_name.replace(" ", "_").ljust(21, "_")
+        transaction_output = (
+            f"02_{formatted_username}_"
+            f"{self.user1.account_number:>5}_"
+            f"{float(self.amount):.2f}_"
+            f"{self.user2.account_number}"
+        )
+
+        return transaction_output
+    
 
