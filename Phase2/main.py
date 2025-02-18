@@ -162,8 +162,8 @@ def banking_system():
                 print("Error: You must be logged in as a standard user to pay bills.")
         
         elif command == "deposit":
-            if not logged_in:
-                print("Error: You must be logged in to perform transactions.")
+            if not logged_in or session_type != "admin":
+                print("Error: You must be logged in as an admin to deposit into other accounts.")
                 continue
 
             account_number = input("Enter account number: ").strip()
@@ -184,6 +184,9 @@ def banking_system():
                 print("Error: Account number and holder name do not match.")
         
         elif command == "create":
+            if not logged_in or session_type != "admin":
+                print("Error: You must be logged in as an admin to deposit into other accounts.")
+                continue
             create_account = Create(session_type, USERS)
             create_account.process_creation()
 
@@ -227,10 +230,6 @@ def banking_system():
 
         else:
             print("Invalid command.")
-
-        
-
-
 
 if __name__ == "__main__":
     banking_system()
