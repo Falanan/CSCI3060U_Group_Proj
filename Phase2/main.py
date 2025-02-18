@@ -33,6 +33,7 @@ from check import Check
 from deposit import Deposit
 from create import Create
 from changeplan import ChangePlan
+from disable import Disable
 
 class User:
     def __init__(self, account_number, user_name, availability, balance):
@@ -218,7 +219,6 @@ def banking_system():
 
             # Now perform the changeplan transaction. The ChangePlan class will check
             # that the provided account number matches the user's actual account number.
-            from changeplan import ChangePlan
             change_plan = ChangePlan(session_type, found_user, account_number)
             change_plan.process_changeplan()
 
@@ -226,6 +226,28 @@ def banking_system():
             transaction_output = change_plan.return_transaction_output()
             log_transaction(transaction_output)
 
+        elif command == "disable":
+            if not logged_in:
+                print("Error: You must be logged in to perform transactions.")
+                continue
+
+            if session_type != "admin":
+                print("Error: This is a privileged transaction that requires admin mode.")
+                continue
+
+            # Prompt for the account holder's name.
+            account_holder_name = input("Enter account holder name: ").strip()
+            # Prompt for the account number.
+            account_number = input("Enter account number: ").strip()
+
+            # Create a Disable transaction instance and process it.
+            disable_txn = Disable(session_type, account_holder_name, account_number, USERS)
+            disable_txn.process_disable()
+
+            # Log the transaction only if processing succeeded.
+            transaction_output = disable_txn.return_transaction_output()
+            if transaction_output:
+                log_transaction(transaction_output)
 
 
         else:
