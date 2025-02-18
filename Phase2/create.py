@@ -135,7 +135,7 @@ class Create:
         # Prepare the transaction output in the required format
         formatted_username = new_account["user_name"].replace(" ", "_").ljust(21, "_")
         transaction_output = (
-            f"01_{formatted_username}_"
+            f"05_{formatted_username}_"
             f"{new_account['account_number']:>5}_"
             f"{float(initial_balance):.2f}"
         )
