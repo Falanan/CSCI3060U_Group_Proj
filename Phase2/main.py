@@ -77,29 +77,23 @@ def banking_system():
         if command == "login":
             print("Welcome to the banking system.")
             
-            if logged_in:
-                print("You are already logged in.")
-                continue
-            
             session_type = input("Enter session type: ").strip().lower()
             if session_type == "admin":
+                login_instance = Login(session_type, None, logged_in)
+                login_instance.process_login()
                 logged_in = True
                 current_user = None
             else:
-                user_name = input("Enter account holder name: ").strip()
-                found_user = None
-                for user in USERS.values():
-                    if user.user_name.replace(" ", "_") == user_name:
-                        found_user = user
-                        break
+                account_number = input("Enter account number: ").strip()
+                found_user = USERS.get(account_number)
                 
                 if found_user:
                     current_user = found_user
-                    login_instance = Login(session_type, current_user)
+                    login_instance = Login(session_type, current_user, logged_in)
                     login_instance.process_login()
                     logged_in = True
                 else:
-                    print("Error: Invalid account holder name.")
+                    print("Error: Invalid account number.")
         
         # elif command == "logout":
         #     if logged_in:

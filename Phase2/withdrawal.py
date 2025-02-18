@@ -8,6 +8,18 @@ class Withdrawal:
         self.amount = amount  # Amount to be withdrawn
         self.check = Check()
 
+    def check_account_number(self):
+        if not self.check.account_existence_check(self.user):
+            print("Error: Invalid account number.")
+            return False
+        return True
+
+    def check_balance(self):
+        if not self.check.balance_check(self.user, self.amount):
+            print("Error: Account balance less than requested withdrawal amount.")
+            return False
+        return True
+
     def process_withdrawal(self):
         # Basic input validation
         all_inputs_valid, missing_fields = self.check.missing_input_check(

@@ -3,27 +3,38 @@
 from check import Check
 
 class Login:
-    def __init__(self, userType, user):
+    def __init__(self, userType, user, logged_in):
         self.userType = userType  # 'admin' or 'standard'
         self.user = user  # User object with account details
+        self.logged_in = logged_in
         self.check = Check()
 
-    def process_login(self):
-        # Basic input validation
-        all_inputs_valid, missing_fields = self.check.missing_input_check(
-            user=self.user,
-            userType=self.userType
-        )
-        if not all_inputs_valid:
-            print(f"Error: The login {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
-            return
-        
-        # Validate account existence
+    def check_user_type(self):
+        if self.userType not in ["admin", "standard"]:
+            print("Error: Invalid session type.")
+            return False
+        return True
+    
+    def check_username(self):
         if not self.check.account_existence_check(self.user):
             print("Error: Invalid account holder name")
+            return False
+        return True
+    
+    def check_double_login(self):
+        if self.logged_in:
+            print("Error: You are already logged in.")
+            return False
+        return True
+
+    def process_login(self):
+        if not self.check_double_login():
+            return
+        if not self.check_user_type():
+            return
+        if self.userType == "standard" and not self.check_username():
             return
         
-        # Process login
         print("Login_Success")
         return self.return_transaction_output()
     
