@@ -31,6 +31,7 @@ from transfer import Transfer
 from paybill import Paybill
 from check import Check
 from deposit import Deposit
+from create import Create
 from changeplan import ChangePlan
 
 class User:
@@ -181,6 +182,10 @@ def banking_system():
                     print("Error: Deposit amount must be greater than zero.")
             else:
                 print("Error: Account number and holder name do not match.")
+        
+        elif command == "create":
+            create_account = Create(session_type, USERS)
+            create_account.process_creation()
 
         elif command == "changeplan":
             if not logged_in:
