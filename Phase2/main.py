@@ -8,10 +8,10 @@ both standard and admin sessions, where the admin has special privileges such as
 limits and accessing all user accounts.
 
 Input Files:
-- None (User accounts are hardcoded into the program)
+- None (User accounts are hardcoded into the program) #TODO: current user accounts file, available rental units file
 
 Output Files:
-- daily_transaction_file.txt: Stores a record of all transactions performed during a session.
+- daily_transaction_file.txt: Stores a record of all transactions performed during a session (Maybe need to break transactions as day by day).
 
 How to Run:
 1. Start the program.
@@ -23,6 +23,7 @@ How to Run:
    - "transfer" to transfer funds between accounts.
    - "paybill" to pay a bill to a predefined company.
    - "logout" to end the session and save the transactions.
+   - TODO: Add rest features
 4. Transactions are logged in the output file upon execution.
 """
 
@@ -38,7 +39,7 @@ class User:
         self.balance = float(balance)
         self.user_type = "standard"  # Default all users to "standard"
 
-# Hardcoded users
+#TODO： Hardcoded users, should be read the txt file to get it
 USERS = {
     "00001": User("00001", "Dev Thaker", "A", 500.00),
     "00002": User("00002", "Wenbo Zhang", "D", 250.00),
