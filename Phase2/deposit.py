@@ -2,7 +2,7 @@ from check import Check
 
 class Deposit:
     def __init__(self, userType, user, amount=None):
-        self.userType = userType  # 'admin' or 'standard'
+        self.userType = userType  # 'admin' or 'user'
         self.user = user  # User object with account details
         self.amount = amount  # Amount to be deposited
         self.check = Check()

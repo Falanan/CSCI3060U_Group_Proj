@@ -75,7 +75,7 @@ from check import Check
 
 class Create:
     def __init__(self, userType, accounts, transaction_file="daily_transaction_file.txt"):
-        self.userType = userType  # 'admin' or 'standard'
+        self.userType = userType  # 'admin' or 'user'
         self.accounts = accounts  # Dictionary containing existing accounts
         self.transaction_file = transaction_file  # File to store transactions
         self.check = Check()
@@ -129,7 +129,6 @@ class Create:
         self.log_transaction(transaction_output)
 
         print(f"Account created successfully with account number: {account_number}")
-        print(transaction_output)
 
     def return_transaction_output(self, new_account, initial_balance):
         # Prepare the transaction output in the required format

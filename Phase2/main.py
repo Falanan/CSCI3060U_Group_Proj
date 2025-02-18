@@ -32,6 +32,7 @@ from paybill import Paybill
 from check import Check
 from deposit import Deposit
 from create import Create
+from delete import Delete
 from changeplan import ChangePlan
 from disable import Disable
 from login import Login
@@ -193,6 +194,14 @@ def banking_system():
                 continue
             create_account = Create(session_type, USERS)
             create_account.process_creation()
+        
+        elif command == "delete":
+            if not logged_in or session_type != "admin":
+                print("Error: You must be logged in as an admin to delete accounts.")
+                continue
+            
+            delete_account = Delete(session_type, USERS)
+            delete_account.process_deletion()
 
         elif command == "changeplan":
             if not logged_in:
