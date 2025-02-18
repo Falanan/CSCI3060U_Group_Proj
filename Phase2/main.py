@@ -31,6 +31,7 @@ from transfer import Transfer
 from paybill import Paybill
 from check import Check
 from deposit import Deposit
+from changeplan import ChangePlan
 
 class User:
     def __init__(self, account_number, user_name, availability, balance):
@@ -180,8 +181,51 @@ def banking_system():
                     print("Error: Deposit amount must be greater than zero.")
             else:
                 print("Error: Account number and holder name do not match.")
+
+        elif command == "changeplan":
+            if not logged_in:
+                print("Error: You must be logged in to perform transactions.")
+                continue
+
+            if session_type != "admin":
+                print("Error: This is a privileged transaction that requires admin mode.")
+                continue
+
+            # Ask for the account holder name
+            account_holder_name = input("Enter account holder name: ").strip()
+
+            # Search for a user with the given name.
+            found_user = None
+            for user in USERS.values():
+                if user.user_name.strip().lower() == account_holder_name.lower():
+                    found_user = user
+                    break
+
+            if found_user is None:
+                print("Error: Account holder name not found.")
+                continue
+
+            # Ask for the account number.
+            account_number = input("Enter account number: ").strip()
+
+            # Now perform the changeplan transaction. The ChangePlan class will check
+            # that the provided account number matches the user's actual account number.
+            from changeplan import ChangePlan
+            change_plan = ChangePlan(session_type, found_user, account_number)
+            change_plan.process_changeplan()
+
+            # Log the transaction output only if the transaction was successful.
+            transaction_output = change_plan.return_transaction_output()
+            log_transaction(transaction_output)
+
+
+
         else:
             print("Invalid command.")
+
+        
+
+
 
 if __name__ == "__main__":
     banking_system()
