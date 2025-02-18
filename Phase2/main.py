@@ -101,16 +101,16 @@ def banking_system():
                 else:
                     print("Error: Invalid account holder name.")
         
-        elif command == "logout":
-            if logged_in:
-                log_transaction("00_________________________00000_00000.00__")
-                print("Logout successful.")
-                logged_in = False
-                current_user = None
-                session_type = None
-                break
-            else:
-                print("You are not logged in.")
+        # elif command == "logout":
+        #     if logged_in:
+        #         log_transaction("00_________________________00000_00000.00__")
+        #         print("Logout successful.")
+        #         logged_in = False
+        #         current_user = None
+        #         session_type = None
+        #         break
+        #     else:
+        #         print("You are not logged in.")
         
         elif command == "withdrawal":
             if not logged_in or not current_user:
