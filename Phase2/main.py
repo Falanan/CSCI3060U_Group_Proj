@@ -31,6 +31,7 @@ from transfer import Transfer
 from paybill import Paybill
 from check import Check
 from deposit import Deposit
+from create import Create
 
 class User:
     def __init__(self, account_number, user_name, availability, balance):
@@ -180,6 +181,10 @@ def banking_system():
                     print("Error: Deposit amount must be greater than zero.")
             else:
                 print("Error: Account number and holder name do not match.")
+        
+        elif command == "create":
+            create_account = Create(session_type, USERS)
+            create_account.process_creation()
         else:
             print("Invalid command.")
 
