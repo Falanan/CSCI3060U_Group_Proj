@@ -36,16 +36,16 @@ class Login:
             return
         
         print("Login_Success")
-        return self.return_transaction_output()
+    #     return self.return_transaction_output()
     
-    def return_transaction_output(self):
-        formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
-        transaction_output = (
-            f"01_{formatted_username}_"
-            f"{self.user.account_number:>5}_"
-            f"{self.userType}"
-        )
-        return transaction_output
+    # def return_transaction_output(self):
+    #     formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
+    #     transaction_output = (
+    #         f"01_{formatted_username}_"
+    #         f"{self.user.account_number:>5}_"
+    #         f"{self.userType}"
+    #     )
+    #     return transaction_output
 
 if __name__ == "__main__":
     print("Welcome to the banking system")

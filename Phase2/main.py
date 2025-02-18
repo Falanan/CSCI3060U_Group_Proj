@@ -107,10 +107,18 @@ def banking_system():
         #     else:
         #         print("You are not logged in.")
         
-        elif command == "withdrawal":
-            if not logged_in or not current_user:
+        elif command == "withdraw":
+            if not logged_in:
                 print("Error: You must be logged in to withdraw.")
                 continue
+            
+            if session_type == "admin":
+                account_number = input("Enter account number: ").strip()
+                user_name = input("Enter user name: ").strip()
+                current_user = USERS.get(account_number)
+                if not current_user or current_user.user_name != user_name:
+                    print("Error: Invalid account number or user name.")
+                    continue
             
             amount = input("Enter withdrawal amount: ").strip()
             try:
