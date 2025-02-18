@@ -20,9 +20,6 @@ class Check:
     def account_existence_check(self, user):
         return user is not None
 
-    # def inactive_account_check(self, user):
-    #     return user.availability != "D"
-
     def admin_override_check(self, user):
         return user.userType == "admin"
 
@@ -42,12 +39,19 @@ class Check:
         try:
             float(value)
             return True
-        except ValueError:
+        # except ValueError:
+        except(ValueError, TypeError):
             return False
 
     def missing_input_check(self, **kwargs):
         missing_fields = [key for key, value in kwargs.items() if not value]
 
         if missing_fields:
-            return False, f"Error: Missing required fields: {', '.join(missing_fields)}."
+            return False, missing_fields
         return True, ""
+    
+    def sender_account_match(self, user, sender_account):
+        """
+        Check if the sender account number matches the logged-in user's account.
+        """
+        return user.account_number == sender_account

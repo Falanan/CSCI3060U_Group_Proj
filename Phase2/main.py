@@ -1,0 +1,120 @@
+from transfer import Transfer
+from paybill import Paybill
+from check import Check
+
+class User:
+    def __init__(self, account_number, user_name, availability, balance):
+        self.account_number = account_number
+        self.user_name = user_name.strip()
+        self.availability = availability  # "A" for active, "D" for disabled
+        self.balance = float(balance)
+        self.user_type = "standard"  # Default all users to "standard"
+
+# Hardcoded users
+USERS = {
+    "00001": User("00001", "Dev Thaker", "A", 500.00),
+    "00002": User("00002", "Wenbo Zhang", "D", 250.00),
+    "00003": User("00003", "Xuan Zheng", "A", 1400.00),
+    "00004": User("00004", "Neel Shah", "A", 0.00),
+    "00005": User("00005", "Jeremy Bradbury", "D", 1500.00),
+    "00006": User("00006", "Riddhi More", "A", 2200.00),
+    "00007": User("00007", "Emon Roy", "A", 750.00),
+    "00008": User("00008", "Eve Adams", "A", 300.00),
+}
+
+def banking_system():
+    logged_in = False
+    current_user = None
+    session_type = None
+    check = Check()
+    
+    while True:
+        command = input("Enter command: ").strip().lower()
+        
+        if command == "login":
+            print("Welcome to the banking system.")
+            
+            if logged_in:
+                print("You are already logged in.")
+                continue
+            
+            session_type = input("Enter session type: ").strip().lower()
+            if session_type == "admin":
+                # print("Admin login successful.")
+                logged_in = True
+                current_user = None
+            else:
+                user_name = input("Enter account holder name: ").strip()
+                found_user = None
+                for user in USERS.values():
+                    if user.user_name.replace(" ", "_") == user_name:
+                        found_user = user
+                        break
+                
+                if found_user:
+                    current_user = found_user
+                    logged_in = True
+                else:
+                    print("Error: Invalid account holder name.")
+        
+        elif command == "logout":
+            if logged_in:
+                print("Logout successful.")
+                logged_in = False
+                current_user = None
+                session_type = None
+                break
+            else:
+                print("You are not logged in.")
+        
+        elif command == "withdrawal":
+            if not logged_in:
+                print("Error: You must be logged in to perform transactions.")
+                continue
+            
+            amount = float(input("Enter withdrawal amount: "))
+            if session_type == "admin" or (current_user and current_user.balance >= amount):
+                if current_user:
+                    current_user.balance -= amount
+                print(f"Withdrawal successful. New balance: ${current_user.balance:.2f}" if current_user else "Admin withdrawal successful.")
+            else:
+                print("Error: Insufficient balance.")
+        
+        elif command == "transfer":
+            if not logged_in:
+                print("Error: You must be logged in to perform transactions.")
+                continue
+            
+            sender_account = input("Enter sender account number: ").strip()
+            receiver_account = input("Enter target account number: ").strip()
+            amount = float(input("Enter transfer amount: "))
+            
+            if session_type == "admin" or (current_user and check.sender_account_match(current_user, sender_account)):
+                if receiver_account in USERS and receiver_account != sender_account:
+                    transfer = Transfer(session_type, USERS[sender_account], USERS[receiver_account], amount)
+                    transfer.process_transfer()
+                else:
+                    print("Error: Invalid target account number.")
+            else:
+                print("Error: Unauthorized transfer. You can only transfer from accounts you own.")
+        
+        elif command == "paybill":
+            if not logged_in:
+                print("Error: You must be logged in to perform transactions.")
+                continue
+            
+            sender_account = input("Enter sender account number: ").strip()
+            company = input("Enter company code (EC, CQ, FI): ").strip().upper()
+            amount = float(input("Enter bill amount: "))
+            
+            if session_type == "admin" or (current_user and check.sender_account_match(current_user, sender_account)):
+                paybill = Paybill(session_type, USERS[sender_account], company, amount)
+                paybill.process_paybill()
+            else:
+                print("Error: You must be logged in as a standard user to pay bills.")
+        
+        else:
+            print("Invalid command. Available commands: login, logout, withdrawal, transfer, paybill")
+
+if __name__ == "__main__":
+    banking_system()

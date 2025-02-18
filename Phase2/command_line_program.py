@@ -8,7 +8,7 @@ def banking_system():
     while True:
         command = input()
         if command == "login":
-            print("Welcome to the banking system")
+            print("Welcome to the banking system.")
             
             if logged_in:
                 print("You have already Login")
