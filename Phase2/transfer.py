@@ -9,7 +9,6 @@ class Transfer:
         self.limit = limit
         self.check = Check()
 
-    # 08 not work yet
     def process_transfer(self):
         # Check for missing inputs
         all_inputs_valid, missing_fields = self.check.missing_input_check(

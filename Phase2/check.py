@@ -51,7 +51,4 @@ class Check:
         return True, ""
     
     def sender_account_match(self, user, sender_account):
-        """
-        Check if the sender account number matches the logged-in user's account.
-        """
         return user.account_number == sender_account
