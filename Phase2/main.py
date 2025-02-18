@@ -30,6 +30,7 @@ How to Run:
 from transfer import Transfer
 from paybill import Paybill
 from check import Check
+from deposit import Deposit
 
 class User:
     def __init__(self, account_number, user_name, availability, balance):
@@ -158,6 +159,27 @@ def banking_system():
             else:
                 print("Error: You must be logged in as a standard user to pay bills.")
         
+        elif command == "deposit":
+            if not logged_in:
+                print("Error: You must be logged in to perform transactions.")
+                continue
+
+            account_number = input("Enter account number: ").strip()
+            account_holder_name = input("Enter account holder name: ").strip()
+
+            if account_number in USERS and USERS[account_number].user_name.strip() == account_holder_name:
+                deposit_amount = float(input("Enter deposit amount: "))
+                
+                if deposit_amount > 0:
+                    deposit = Deposit(session_type, USERS[account_number], deposit_amount)
+                    deposit.process_deposit()
+                    # Log transaction
+                    transaction_output = deposit.return_transaction_output()
+                    log_transaction(transaction_output)
+                else:
+                    print("Error: Deposit amount must be greater than zero.")
+            else:
+                print("Error: Account number and holder name do not match.")
         else:
             print("Invalid command.")
 
