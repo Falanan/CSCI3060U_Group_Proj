@@ -1,6 +1,19 @@
+
+"""
+Paybill Class
+
+Handles the payment of bills to predefined companies. 
+This class ensures proper validation of inputs, available funds, and transaction limits.
+"""
+
 from check import Check
 
 class Paybill:
+    
+    """
+    Handles bill payments, ensuring the user has sufficient balance and the biller is valid.
+    """
+    
     COMPANY_ACCOUNTS = {
         "EC": "10000",
         "CQ": "20000",
@@ -16,6 +29,7 @@ class Paybill:
         self.check = Check()
 
     def process_paybill(self):
+        """ Processes the bill payment after performing necessary validations. """
         # Basic checks
         all_inputs_valid, missing_fields = self.check.missing_input_check(
             user=self.user, 
@@ -89,6 +103,7 @@ class Paybill:
         return self.company in self.COMPANY_ACCOUNTS
 
     def display_transaction_output(self, company_id):
+        """ Displays the formatted transaction output for logging. """
         formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
         transaction_output = (
             f"03_{formatted_username}_"
@@ -102,6 +117,7 @@ class Paybill:
         print(end_session_output)
     
     def return_transaction_output(self, company_id):
+        """ Returns the formatted transaction output for logging. """
         formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
         transaction_output = (
             f"03_{formatted_username}_"
