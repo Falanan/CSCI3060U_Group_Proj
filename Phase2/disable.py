@@ -69,7 +69,7 @@ class Disable:
     def return_transaction_output(self):
         """
         Returns the fixed-length transaction output string for a disable transaction:
-        07_{username padded}_NNNNN_00000.00_D
+        07_{username spaced}_NNNNN_00000.00_D
         """
         if self.user is None:
             # If the transaction did not process correctly, return an empty string.
