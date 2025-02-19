@@ -17,7 +17,7 @@ Output File:
 How to Run:
 1. Execute main.py to start the application.
 2. Enter "login" to authenticate:
-   - Enter session type ("admin" or "user"/"standard").
+   - Enter session type ("admin" or "standard").
    - Admin users get full access; standard users enter their account number.
 3. After successful login, you can enter one of the following commands:
    - "withdrawal" to withdraw funds.
