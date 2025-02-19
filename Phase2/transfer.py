@@ -1,6 +1,19 @@
+
+"""
+Transfer Class
+
+Handles the transfer of funds between two user accounts.
+This class ensures proper validation of input values, available funds, and transaction limits.
+"""
+    
 from check import Check
 
 class Transfer:
+    
+    """
+    Handles money transfers between user accounts, ensuring all required checks are met.
+    """
+    
     def __init__(self, userType, user1, user2, amount = None, limit=1000.00):
         self.userType = userType
         self.user1 = user1
@@ -10,6 +23,8 @@ class Transfer:
         self.check = Check()
 
     def process_transfer(self):
+        # Processes the fund transfer after performing necessary validations.
+        
         # Check for missing inputs
         all_inputs_valid, missing_fields = self.check.missing_input_check(
             user1=self.user1,

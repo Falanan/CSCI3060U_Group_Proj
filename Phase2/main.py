@@ -105,17 +105,6 @@ def banking_system():
                 else:
                     print("Error: Invalid account number.")
         
-        # elif command == "logout":
-        #     if logged_in:
-        #         log_transaction("00_________________________00000_00000.00__")
-        #         print("Logout successful.")
-        #         logged_in = False
-        #         current_user = None
-        #         session_type = None
-        #         break
-        #     else:
-        #         print("You are not logged in.")
-        
         elif command == "withdraw":
             if not logged_in:
                 print("Error: You must be logged in to withdraw.")
