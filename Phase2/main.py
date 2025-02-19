@@ -2,29 +2,38 @@
 Main Banking System
 
 Description:
-This program simulates a banking system that allows users to perform transactions such as withdrawals, 
-transfers, and bill payments. Users must log in before performing transactions. The system supports 
-both standard and admin sessions, where the admin has special privileges such as overriding account 
-limits and accessing all user accounts.
+This program simulates a banking system that allows users to perform transactions such as 
+withdrawals, transfers, and bill payments. Users must log in before performing any transaction. 
+The system supports both standard (user) and admin sessions, where admin sessions have special 
+privileges (e.g., overriding account limits, accessing all user accounts).
 
-Input Files:
-- None (User accounts are hardcoded into the program) #TODO: current user accounts file, available rental units file
+Input Sources:
+- No dedicated input file for accounts (hardcoded users)
+- CLI-based user input for commands
 
-Output Files:
-- daily_transaction_file.txt: Stores a record of all transactions performed during a session (Maybe need to break transactions as day by day).
+Output File:
+- daily_transaction_file.txt: Stores a record of all transactions performed during a session.
 
 How to Run:
-1. Start the program.
-2. Enter "login" to authenticate.
-   - Admin users enter "admin" to log in with full access.
-   - Standard users enter their username to log in.
-3. After login, enter one of the following commands:
-   - "withdrawal" to withdraw funds from the logged-in account.
-   - "transfer" to transfer funds between accounts.
-   - "paybill" to pay a bill to a predefined company.
-   - "logout" to end the session and save the transactions.
-   - TODO: Add rest features
-4. Transactions are logged in the output file upon execution.
+1. Execute main.py to start the application.
+2. Enter "login" to authenticate:
+   - Enter session type ("admin" or "user"/"standard").
+   - Admin users get full access; standard users enter their account number.
+3. After successful login, you can enter one of the following commands:
+   - "withdrawal" to withdraw funds.
+   - "transfer"  to move funds between accounts.
+   - "paybill"   to pay a bill to a known company.
+   - "create"    (admin only) to create a new account.
+   - "delete"    (admin only) to remove an existing account.
+   - "disable"   (admin only) to disable an account.
+   - "changeplan" (admin only) to switch or toggle the account’s plan.
+   - "logout"    to end the session and save all transactions.
+4. Transaction details are automatically written to daily_transaction_file.txt upon each operation.
+
+TODO:
+- Enhance error handling for edge cases.
+- Implement file-based user accounts instead of hardcoding.
+- Break transactions day by day into separate logs.
 """
 
 from transfer import Transfer
