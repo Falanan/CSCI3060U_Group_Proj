@@ -1,4 +1,4 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Error: Initial balance cannnot have alphabet/characters and cannot be negative.
-Session terminated
+Error: Invalid initial balance. Amount must be numeric.
+Session terminated.

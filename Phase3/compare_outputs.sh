@@ -130,7 +130,7 @@ compare_deposit_outputs() {
   echo ""
   echo "Comparing DEPOSIT outputs..."
 
-  # We have 9 test cases
+  # We have 8 test cases
   for i in $(seq 1 8); do
     CASE_ID=$(printf "%02d" $i)
 
@@ -143,6 +143,30 @@ compare_deposit_outputs() {
     local expected_etf="transaction_outputs/04_deposit_transaction_outputs/deposit_${CASE_ID}.etf"
 
     local label="DEPOSIT test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
+##################################
+# CREATE comparison
+##################################
+compare_create_outputs() {
+  echo ""
+  echo "Comparing CREATE outputs..."
+
+  # We have 8 test cases
+  for i in $(seq 1 8); do
+    CASE_ID=$(printf "%02d" $i)
+
+    # -- Actual
+    local actual_out="outputs/05_create_outputs/05_test_${CASE_ID}.out"
+    local actual_etf="transaction_outputs/05_create_transaction_outputs/05_test_${CASE_ID}.etf"
+
+    # -- Expected
+    local expected_out="outputs/05_create_outputs/create${CASE_ID}.out"
+    local expected_etf="transaction_outputs/05_create_transaction_outputs/create_${CASE_ID}.etf"
+
+    local label="CREATE test #$CASE_ID"
     compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
   done
 }
@@ -209,6 +233,8 @@ elif [[ "$TEST_ID" == "03" ]]; then
   compare_paybill_outputs
 elif [[ "$TEST_ID" == "04" ]]; then
   compare_deposit_outputs
+elif [[ "$TEST_ID" == "05" ]]; then
+  compare_create_outputs
 elif [[ "$TEST_ID" == "07" ]]; then
   compare_changeplan_outputs
 elif [[ "$TEST_ID" == "08" ]]; then
@@ -220,6 +246,7 @@ else
   compare_transfer_outputs
   compare_paybill_outputs
   compare_deposit_outputs
+  compare_create_outputs
   compare_changeplan_outputs
   compare_disable_outputs
   compare_logout_outputs

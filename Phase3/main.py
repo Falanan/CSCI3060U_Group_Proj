@@ -394,10 +394,34 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
         
         elif command == "create":
             if not logged_in or session_type != "admin":
-                print("Error: You must be logged in as an admin to deposit into other accounts.")
+                write_console("Error: You must be logged in as an admin to create an account.")
                 continue
-            create_account = Create(session_type, USERS)
-            create_account.process_creation()
+
+            if i >= len(commands):
+                write_console("Error: Missing account holder name.")
+                break
+            account_holder_name = commands[i].strip()
+            i += 1
+
+            if i >= len(commands):
+                write_console("Error: Missing initial balance.")
+                break
+
+            if check.invalid_character_check(commands[i]):
+                initial_balance = float(commands[i])
+            else:
+                write_console("Error: Invalid initial balance. Amount must be numeric.")
+                continue
+            i += 1
+
+            if initial_balance >= 0:
+                create_account = Create(session_type, USERS, account_holder_name, initial_balance, write_console=write_console)
+                transaction_output = create_account.process_creation()
+
+                if transaction_output:  # Ensure only successful creations are logged
+                    log_transaction(transaction_output)
+            else:
+                write_console("Error: Initial balance cannot be negative.")
         
         elif command == "delete":
             if not logged_in or session_type != "admin":

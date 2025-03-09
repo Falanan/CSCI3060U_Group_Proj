@@ -5,18 +5,30 @@ class Create:
     A class to handle the creation of new user accounts.
     Only admins can create new accounts.
     """
-    def __init__(self, userType, accounts, transaction_file="daily_transaction_file.txt"):
+    def __init__(self, userType, accounts, account_holder_name, initial_balance, transaction_file="daily_transaction_file.txt", write_console=None):
         """
         Initializes the Create class.
         
         :param userType: The type of user (should be 'admin' for account creation).
         :param accounts: A dictionary containing existing accounts.
-        :param transaction_file: The file where transaction logs are stored (default: 'daily_transaction_file.txt').
+        :param account_holder_name: Name of the new account holder.
+        :param initial_balance: The initial balance for the account.
+        :param transaction_file: The file where transaction logs are stored.
+        :param write_console: Function to handle console output.
         """
-        self.userType = userType  # 'admin' or 'user'
-        self.accounts = accounts  # Dictionary containing existing accounts
-        self.transaction_file = transaction_file  # File to store transactions
+        self.userType = userType
+        self.accounts = accounts
+        self.account_holder_name = account_holder_name
+        self.initial_balance = initial_balance
+        self.transaction_file = transaction_file
         self.check = Check()
+
+        # Provide a default no-op if not given
+        if write_console is None:
+            def _default_console(msg): pass
+            self.write_console = _default_console
+        else:
+            self.write_console = write_console
 
     def process_creation(self):
         """
@@ -25,32 +37,24 @@ class Create:
         """
         # Ensure only admins can create an account
         if self.userType != "admin":
-            print("Error: Only admins can create new accounts.")
-            return
+            self.write_console("Error: Only admins can create new accounts.")
+            return None
 
-        # Get the account holder's name
-        account_holder = input("Enter the account holder's name: ").strip()
-        if not account_holder:
-            print("Error: Account holder name cannot be empty.")
-            return
-        if len(account_holder) > 20:
-            print("Error: Account holder name must be at most 20 characters.")
-            return
-
-        # Get the initial balance
-        try:
-            initial_balance = float(input("Enter the initial balance: ").strip())
-        except ValueError:
-            print("Error: Invalid balance. Please enter a numeric value.")
-            return
+        # Validate account holder name
+        if not self.account_holder_name:
+            self.write_console("Error: Account holder name cannot be empty.")
+            return None
+        if len(self.account_holder_name) > 20:
+            self.write_console("Error: Account holder name must be at most 20 characters.")
+            return None
 
         # Validate balance
-        if not self.check.negative_amount_check(initial_balance):
-            print("Error: Balance cannot be negative.")
-            return
-        if initial_balance > 99999.99:
-            print("Error: Initial balance cannot exceed $99,999.99.")
-            return
+        if not self.check.negative_amount_check(self.initial_balance):
+            self.write_console("Error: Balance cannot be negative.")
+            return None
+        if self.initial_balance > 99999.99:
+            self.write_console("Error: Initial balance cannot exceed $99,999.99.")
+            return None
 
         # Generate unique account number (ensures 5-digit format)
         account_number = str(len(self.accounts) + 1).zfill(5)
@@ -58,8 +62,8 @@ class Create:
         # Create the new account entry
         new_account = {
             "account_number": account_number,
-            "user_name": account_holder,
-            "balance": initial_balance,
+            "user_name": self.account_holder_name,
+            "balance": self.initial_balance,
             "availability": "A",  # Mark the account as active
         }
 
@@ -67,10 +71,11 @@ class Create:
         self.accounts[account_number] = new_account
 
         # Log the transaction details
-        transaction_output = self.return_transaction_output(new_account, initial_balance)
+        transaction_output = self.return_transaction_output(new_account, self.initial_balance)
         self.log_transaction(transaction_output)
 
-        print(f"Account created successfully with account number: {account_number}")
+        self.write_console(f"Account created successfully for '{self.account_holder_name}' with initial balance of ${self.initial_balance}0.")
+        return transaction_output  # Return transaction output for logging
 
     def return_transaction_output(self, new_account, initial_balance):
         """
@@ -84,7 +89,7 @@ class Create:
         transaction_output = (
             f"05_{formatted_username}_"
             f"{new_account['account_number']:>5}_"
-            f"{float(initial_balance):.2f}"
+            f"{float(initial_balance):0>8.2f}__"
         )
         return transaction_output
 

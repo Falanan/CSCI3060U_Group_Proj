@@ -95,6 +95,30 @@ run_deposit_tests() {
   echo "All DEPOSIT tests completed."
 }
 
+run_create_tests() {
+  echo "Running all CREATE tests..."
+
+  # We assume 8 test cases named create_01.inp ... create_08.inp
+  for i in $(seq 1 8); do
+    # zero-pad the test index (01, 02, ..., 12)
+    CASE_ID=$(printf "%02d" $i)
+
+    # Input file
+    INPUT_FILE="inputs/05_create_inputs/create${CASE_ID}.inp"
+
+    # .out file
+    OUT_FILE="outputs/05_create_outputs/05_test_${CASE_ID}.out"
+
+    # .etf file
+    ETF_FILE="transaction_outputs/05_create_transaction_outputs/05_test_${CASE_ID}.etf"
+
+    echo "  Running CREATE test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All CREATE tests completed."
+}
+
 ##################################
 # Helper: Run CHANGEPLAN tests (07)
 ##################################
@@ -159,6 +183,9 @@ elif [[ "$TEST_ID" == "03" ]]; then
 elif [[ "$TEST_ID" == "04" ]]; then
   # run only deposit tests
   run_deposit_tests
+elif [[ "$TEST_ID" == "05" ]]; then
+  # run only create tests
+  run_create_tests
 elif [[ "$TEST_ID" == "07" ]]; then
   run_changeplan_tests
 elif [[ "$TEST_ID" == "08" ]]; then
@@ -171,6 +198,7 @@ else
   run_transfer_tests
   run_paybill_tests
   run_deposit_tests
+  run_create_tests
   run_changeplan_tests
   run_disable_tests
   run_logout_tests
