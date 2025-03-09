@@ -6,6 +6,9 @@
 #   ./run_tests.sh           # runs ALL tests (both TRANSFER and PAYBILL)
 #   ./run_tests.sh 02        # runs ONLY TRANSFER tests
 #   ./run_tests.sh 03        # runs ONLY PAYBILL tests
+#   ./run_tests.sh 07        # runs ONLY CHANGEPLAN tests
+#   ./run_tests.sh 08        # runs ONLY DISABLE tests
+#   ./run_tests.sh logout        # runs ONLY LOGOUT tests
 #
 # Make sure main.py and current_accounts_file.txt are in the same directory
 # as this script, or update the paths below if needed.

@@ -6,6 +6,9 @@
 #   ./compare_outputs.sh         # compares ALL tests
 #   ./compare_outputs.sh 02      # compares ONLY TRANSFER tests
 #   ./compare_outputs.sh 03      # compares ONLY PAYBILL tests
+#   ./compare_outputs.sh 07      # compares ONLY CHANGEPLAN tests
+#   ./compare_outputs.sh 08      # compares ONLY DISABLE tests
+#   ./compare_outputs.sh logout      # compares ONLY LOGOUT tests
 #
 # This script compares actual outputs (.out/.etf) to expected outputs,
 # printing which cases passed or failed. If there's a mismatch, we also
