@@ -183,6 +183,7 @@ elif [[ "$TEST_ID" == "logout" ]]; then
 else
   # run all tests
   run_login_tests
+  run_withdrawal_test
   run_transfer_tests
   run_paybill_tests
   run_changeplan_tests

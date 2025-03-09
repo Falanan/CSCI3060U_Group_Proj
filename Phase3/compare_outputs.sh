@@ -238,6 +238,8 @@ elif [[ "$TEST_ID" == "logout" ]]; then
   compare_logout_outputs
 else
   # compare all
+  compare_login_outputs
+  compare_withdrawal_outputs
   compare_transfer_outputs
   compare_paybill_outputs
   compare_changeplan_outputs
