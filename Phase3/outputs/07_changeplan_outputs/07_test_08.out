@@ -3,5 +3,5 @@ Enter session type: admin
 Enter account holder name: Dev_Thaker
 Enter account number: 00001
 Plan change successful. New plan for account 00001 is NP.
-Error: Invalid account number 500 for account holder '00001'.
+Deposit successful. Funds unavailable for this session. New balance: $1000.00
 Session terminated.
