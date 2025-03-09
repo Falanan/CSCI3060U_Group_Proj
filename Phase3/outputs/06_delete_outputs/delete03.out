@@ -1,0 +1,4 @@
+Welcome to the banking system
+Enter session type: admin
+Error: Account "123456" doesn't exist.
+Session terminated

@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: standard
+Enter account holder name: Wenbo_Zhang
+Error: Unauthorized transfer. You can only transfer from accounts you own.
+Session terminated.

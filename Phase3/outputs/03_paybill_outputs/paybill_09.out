@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: standard
+Enter account holder name: Xuan_Zheng
+Error: Invalid payment amount. Amount must be numeric.
+Session terminated.

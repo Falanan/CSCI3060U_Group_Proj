@@ -1,0 +1,4 @@
+Welcome to the banking system
+Enter session type: admin
+Error: Cannot deposit more funds than accounts balance limit of 10000
+Session terminated

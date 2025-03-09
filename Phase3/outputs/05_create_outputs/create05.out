@@ -1,0 +1,4 @@
+Welcome to the banking system
+Enter session type: admin
+Error: Initial balance cannot be more that account's balance limit 1000000
+Session terminated

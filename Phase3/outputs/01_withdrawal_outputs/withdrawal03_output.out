@@ -1,0 +1,6 @@
+Welcome to the banking system
+Enter session type: admin
+Enter account holder name: Non_Existent_Name
+Enter account name: 00002
+Enter Withdrawal amount: 1500.0
+Error: Account balance less than 0

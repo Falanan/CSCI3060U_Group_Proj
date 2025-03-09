@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: standard
+Enter account holder name: Xuan_Zheng
+Error: Transfer amount must be greater than zero.
+Session terminated.

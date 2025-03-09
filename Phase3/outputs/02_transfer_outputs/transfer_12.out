@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: standard
+Enter account holder name: Xuan_Zheng
+Error: Account 00002 is disabled. Transfers cannot be processed.
+Session terminated.
