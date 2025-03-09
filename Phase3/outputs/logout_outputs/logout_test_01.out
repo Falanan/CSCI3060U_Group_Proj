@@ -1,4 +1,4 @@
 Welcome to the banking system.
 Enter session type: admin
-Enter deposit amount: 100.0
+Error: Invalid account number 100 for account holder '00001'.
 Session terminated.
