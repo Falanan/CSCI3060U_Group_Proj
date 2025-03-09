@@ -1,5 +1,7 @@
 Welcome to the banking system.
 Enter session type: admin
-Enter deposit amount: 100.0
-Enter deposit amount: 200.0
+Deposit successful. Funds unavailable for this session. New balance: $600.00
+Enter account holder name: Wenbo_Zhang
+Enter account number: 00002
+Error: Account 00002 is disabled. Cannot change plan.
 Session terminated.

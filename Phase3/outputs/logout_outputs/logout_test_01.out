@@ -1,4 +1,4 @@
 Welcome to the banking system.
 Enter session type: admin
-Error: Invalid account number 100 for account holder '00001'.
+Deposit successful. Funds unavailable for this session. New balance: $600.00
 Session terminated.

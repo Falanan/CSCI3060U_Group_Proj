@@ -1,6 +1,6 @@
 Welcome to the banking system.
 Enter session type: admin
-Error: Invalid account number 200 for account holder '00003'.
+Deposit successful. Funds unavailable for this session. New balance: $1600.00
 Enter account holder name: Dev_Thaker
 Enter account number: 00001
 Account 00001 (Dev_Thaker) has been disabled.
