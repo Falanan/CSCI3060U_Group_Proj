@@ -1,10 +1,10 @@
 login 
 admin
 create
-John_Doe
+Elon_Trust
 1000
-deposit
-John_Doe
-00013
-2000
+withdrawal
+Elon_Trust
+2889343 
+1000
 logout
