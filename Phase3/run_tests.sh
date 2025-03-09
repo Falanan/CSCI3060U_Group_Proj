@@ -37,6 +37,23 @@ run_login_tests() {
 }
 
 
+run_withdrawal_test() {
+  echo "Running all WITHDRAWAL tests..."
+
+  # We assume test cases are named login_01.inp ... login_05.inp (adjust the count as needed)
+  for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/01_withdrawal_inputs/withdrawal${CASE_ID}_input.inp"
+    OUT_FILE="outputs/01_withdrawal_outputs/withdrawal${CASE_ID}_test_output.out"
+    ETF_FILE="transaction_outputs/01_withdrawal_transaction_outputs/withdrawal_test_${CASE_ID}.etf"
+    # transaction_outputs/01_withdrawal_transaction_outputs/withdrawal_test_${CASE_ID}.etf
+    echo "  Running WITHDRAWAL test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All WITHDRAWAL tests completed."
+}
+
 
 # A small helper function to run transfer tests
 run_transfer_tests() {
@@ -148,6 +165,9 @@ run_logout_tests() {
 if [[ "$TEST_ID" == "00" ]]; then
   # run only transfer tests
   run_login_tests
+elif [[ "$TEST_ID" == "01" ]]; then
+  # run only transfer tests
+  run_withdrawal_test
 elif [[ "$TEST_ID" == "02" ]]; then
   # run only transfer tests
   run_transfer_tests
@@ -162,6 +182,7 @@ elif [[ "$TEST_ID" == "logout" ]]; then
   run_logout_tests
 else
   # run all tests
+  run_login_tests
   run_transfer_tests
   run_paybill_tests
   run_changeplan_tests

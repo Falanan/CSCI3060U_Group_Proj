@@ -195,31 +195,85 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                     write_console("Login_Success")
                 else:
                     write_console("Error: Invalid account holder name.")
-        
+
         elif command == "withdraw":
+            # Default log string used for any error case.
+            default_log = "00_________________________00000_00000.00__"
+            
             if not logged_in:
-                print("Error: You must be logged in to withdraw.")
+                write_console("Error: You must be logged in to withdraw.")
+                log_transaction(default_log)
                 continue
-            
-            if session_type == "admin":
-                account_number = input("Enter account number: ").strip()
-                user_name = input("Enter user name: ").strip()
-                current_user = USERS.get(account_number)
-                if not current_user or current_user.user_name != user_name:
-                    print("Error: Invalid account number or user name.")
-                    continue
-            
-            amount = input("Enter withdrawal amount: ").strip()
+
+            # Read account holder name from tokens
+            if i >= len(commands):
+                write_console("Error: Missing account holder name for withdrawal.")
+                log_transaction(default_log)
+                break
+            entered_name = commands[i]
+            write_console(f"Enter account holder name: {entered_name}")
+            i += 1
+
+            # Locate the user from the USERS dictionary
+            found_user = None
+            for u in USERS.values():
+                if u.user_name.lower() == entered_name.lower():
+                    found_user = u
+                    break
+            if not found_user:
+                write_console("Error: Invalid account holder name")
+                log_transaction(default_log)
+                continue
+
+            # Read the provided account number
+            if i >= len(commands):
+                write_console("Error: Missing account number for withdrawal.")
+                log_transaction(default_log)
+                break
+            provided_account = commands[i]
+            i += 1
+            # Display the actual account number from the found user.
+            write_console(f"Enter account name: {found_user.account_number}")
+            if provided_account != found_user.account_number:
+                if session_type == "admin":
+                    write_console("Error: Invalid account number")
+                else:
+                    write_console("Error: Wrong account number")
+                log_transaction(default_log)
+                continue
+
+            # Read the withdrawal amount
+            if i >= len(commands):
+                write_console("Error: Missing withdrawal amount.")
+                log_transaction(default_log)
+                break
+            amount_str = commands[i]
+            write_console(f"Enter Withdrawal amount: {amount_str}")
+            i += 1
             try:
-                amount = float(amount)
+                amount = float(amount_str)
             except ValueError:
-                print("Error: Invalid withdrawal amount.")
+                write_console("Error: Invalid withdrawal amount.")
+                log_transaction(default_log)
                 continue
-            
-            withdrawal_instance = Withdrawal(current_user, amount)
+
+            # Check if withdrawal would result in negative balance.
+            if amount > found_user.balance:
+                write_console("Error: Account balance less than 0")
+                log_transaction(default_log)
+                continue
+            else:
+                write_console("Withdrawal success")
+
+
+            # Process the withdrawal and log the transaction output.
+            withdrawal_instance = Withdrawal(found_user, amount)
             withdrawal_instance.process_withdrawal()
             withdrawal_output = withdrawal_instance.return_transaction_output()
             log_transaction(withdrawal_output)
+
+
+
         
         elif command == "transfer":
             

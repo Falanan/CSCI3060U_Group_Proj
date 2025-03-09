@@ -72,7 +72,9 @@ compare_one_test() {
   fi
 }
 
-
+##################################
+# LOGIN comparison
+##################################
 compare_login_outputs() {
   echo "Comparing Login outputs..."
     for i in $(seq 1 7); do
@@ -88,6 +90,28 @@ compare_login_outputs() {
 
     # Now compare
     local label="Login test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
+##################################
+# WITHDRAWAL comparison
+##################################
+compare_withdrawal_outputs() {
+  echo "Comparing WITHDRAWAL outputs..."
+    for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+
+    # -- Actual files
+    local actual_out="outputs/01_withdrawal_outputs/withdrawal${CASE_ID}_test_output.out"
+    local actual_etf="transaction_outputs/01_withdrawal_transaction_outputs/withdrawal_test_${CASE_ID}.etf"
+
+    # -- Expected files
+    local expected_out="outputs/01_withdrawal_outputs/withdrawal${CASE_ID}_output.out"
+    local expected_etf="transaction_outputs/01_withdrawal_transaction_outputs/withdrawal_${CASE_ID}.etf"
+
+    # Now compare
+    local label="WITHDRAWAL test #$CASE_ID"
     compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
   done
 }
@@ -200,6 +224,8 @@ compare_logout_outputs() {
 
 if [[ "$TEST_ID" == "00" ]]; then
   compare_login_outputs
+elif [[ "$TEST_ID" == "01" ]]; then
+  compare_withdrawal_outputs
 elif [[ "$TEST_ID" == "02" ]]; then
   compare_transfer_outputs
 elif [[ "$TEST_ID" == "03" ]]; then
