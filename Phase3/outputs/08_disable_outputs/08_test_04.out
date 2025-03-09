@@ -1,0 +1,6 @@
+Welcome to the banking system.
+Enter session type: admin
+Enter account holder name: Dev_Thaker
+Enter account number: 99999
+Error: Provided account number does not match the account holder name.
+Session terminated.

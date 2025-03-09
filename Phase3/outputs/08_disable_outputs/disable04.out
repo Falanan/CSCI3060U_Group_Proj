@@ -1,4 +1,6 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Error: Invalid account number
-Session terminated
+Enter account holder name: Dev_Thaker
+Enter account number: 99999
+Error: Provided account number does not match the account holder name.
+Session terminated.

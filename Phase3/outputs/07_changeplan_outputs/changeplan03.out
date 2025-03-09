@@ -1,5 +1,5 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: standard
 Enter account holder name: Dev_Thaker
-Error: Standard users are not allowed to change account plans.
-Session terminated
+Error: This is a privileged transaction that requires admin mode.
+Session terminated.

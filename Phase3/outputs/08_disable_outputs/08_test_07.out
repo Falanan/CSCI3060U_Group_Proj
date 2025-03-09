@@ -1,0 +1,7 @@
+Welcome to the banking system.
+Enter session type: admin
+Enter deposit amount: 200.0
+Enter account holder name: Dev_Thaker
+Enter account number: 00001
+Account 00001 (Dev_Thaker) has been disabled.
+Session terminated.

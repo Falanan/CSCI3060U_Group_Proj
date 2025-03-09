@@ -324,54 +324,88 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             else:
                 write_console("Error: You must be logged in as a standard user to pay bills.")
         
+        # elif command == "deposit":
+        #     if not logged_in or session_type != "admin":
+        #         print("Error: You must be logged in as an admin to deposit into other accounts.")
+        #         continue
+
+        #     account_number = input("Enter account number: ").strip()
+        #     account_holder_name = input("Enter account holder name: ").strip()
+
+        #     if account_number in USERS and USERS[account_number].user_name.strip() == account_holder_name:
+        #         deposit_amount = float(input("Enter deposit amount: "))
+                
+        #         if deposit_amount > 0:
+        #             deposit = Deposit(session_type, USERS[account_number], deposit_amount)
+        #             deposit.process_deposit()
+        #             # Log transaction
+        #             transaction_output = deposit.return_transaction_output()
+        #             log_transaction(transaction_output)
+        #         else:
+        #             print("Error: Deposit amount must be greater than zero.")
+        #     else:
+        #         print("Error: Account number and holder name do not match.")
+        
+
         elif command == "deposit":
             if not logged_in or session_type != "admin":
-                print("Error: You must be logged in as an admin to deposit into other accounts.")
+                write_console("Error: You must be logged in as an admin to deposit into other accounts.")
+                # Consume the next two tokens (if present) that belong to the deposit command.
+                if i + 1 < len(commands):
+                    i += 2
                 continue
 
-            account_number = input("Enter account number: ").strip()
-            account_holder_name = input("Enter account holder name: ").strip()
+            # For admin deposits, expect two tokens: account number and deposit amount.
+            if i >= len(commands):
+                write_console("Error: Missing account number for deposit.")
+                errorEnd()
+                break
+            account_number = commands[i]
+            # (Removed echo of account number to avoid duplicate output)
+            i += 1
 
-            if account_number in USERS and USERS[account_number].user_name.strip() == account_holder_name:
-                deposit_amount = float(input("Enter deposit amount: "))
-                
-                if deposit_amount > 0:
-                    deposit = Deposit(session_type, USERS[account_number], deposit_amount)
-                    deposit.process_deposit()
-                    # Log transaction
-                    transaction_output = deposit.return_transaction_output()
-                    log_transaction(transaction_output)
-                else:
-                    print("Error: Deposit amount must be greater than zero.")
+            if i >= len(commands):
+                write_console("Error: Missing deposit amount for deposit.")
+                errorEnd()
+                break
+            token_amount = commands[i]
+            try:
+                deposit_amount = float(token_amount)
+            except ValueError:
+                write_console("Error: Deposit amount must be numeric.")
+                errorEnd()
+                break
+            write_console(f"Enter deposit amount: {deposit_amount}")
+            i += 1
+
+            if account_number in USERS:
+                deposit = Deposit(session_type, USERS[account_number], deposit_amount)
+                deposit.process_deposit()
+                transaction_output = deposit.return_transaction_output()
+                log_transaction(transaction_output)
             else:
-                print("Error: Account number and holder name do not match.")
-        
-        elif command == "create":
-            if not logged_in or session_type != "admin":
-                print("Error: You must be logged in as an admin to deposit into other accounts.")
-                continue
-            create_account = Create(session_type, USERS)
-            create_account.process_creation()
-        
-        elif command == "delete":
-            if not logged_in or session_type != "admin":
-                print("Error: You must be logged in as an admin to delete accounts.")
-                continue
-            
-            delete_account = Delete(session_type, USERS)
-            delete_account.process_deletion()
+                write_console("Error: Account number not found.")
+
+
+
 
         elif command == "changeplan":
             if not logged_in:
-                print("Error: You must be logged in to perform transactions.")
+                write_console("Error: You must be logged in to perform transactions.")
                 continue
 
             if session_type != "admin":
-                print("Error: This is a privileged transaction that requires admin mode.")
+                write_console("Error: This is a privileged transaction that requires admin mode.")
                 continue
 
-            # Ask for the account holder name
-            account_holder_name = input("Enter account holder name: ").strip()
+            # Get the account holder name from the input file.
+            if i >= len(commands):
+                write_console("Error: Missing account holder name for changeplan.")
+                errorEnd()
+                break
+            account_holder_name = commands[i]
+            write_console(f"Enter account holder name: {account_holder_name}")
+            i += 1
 
             # Search for a user with the given name.
             found_user = None
@@ -381,32 +415,53 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                     break
 
             if found_user is None:
-                print("Error: Account holder name not found.")
+                write_console("Error: Account holder name not found.")
                 continue
 
-            # Ask for the account number.
-            account_number = input("Enter account number: ").strip()
+            # Get the account number from the input file.
+            if i >= len(commands):
+                write_console("Error: Missing account number for changeplan.")
+                errorEnd()
+                break
+            account_number = commands[i]
+            write_console(f"Enter account number: {account_number}")
+            i += 1
 
-            # Now perform the changeplan transaction. The ChangePlan class will check
-            # that the provided account number matches the user's actual account number.
-            change_plan = ChangePlan(session_type, found_user, account_number)
-            change_plan.process_changeplan()
+            # Optionally, check if there's another token for new plan.
+            new_plan = None
+            if i < len(commands):
+                # If the next token is "SP" or "NP", assume it's the desired new plan.
+                if commands[i] in ["SP", "NP"]:
+                    new_plan = commands[i]
+                    write_console(f"Enter new plan: {new_plan}")
+                    i += 1
 
-            # Log the transaction output only if the transaction was successful.
+            
+            # Perform the changeplan transaction.
+            change_plan = ChangePlan(session_type, found_user, account_number, new_plan, write_console=write_console)
+            result = change_plan.process_changeplan()
+            if result != 1:
+                continue  # Do not log a transaction output if changeplan failed.
             transaction_output = change_plan.return_transaction_output()
             log_transaction(transaction_output)
-
+ 
         elif command == "disable":
             if not logged_in:
-                print("Error: You must be logged in to perform transactions.")
+                write_console("Error: You must be logged in to perform transactions.")
                 continue
 
             if session_type != "admin":
-                print("Error: This is a privileged transaction that requires admin mode.")
+                write_console("Error: This is a privileged transaction that requires admin mode.")
                 continue
 
-            # Prompt for the account holder's name.
-            account_holder_name = input("Enter account holder name: ").strip()
+            # Get the account holder name from the input file.
+            if i >= len(commands):
+                write_console("Error: Missing account holder name for disable.")
+                errorEnd()
+                break
+            account_holder_name = commands[i]
+            write_console(f"Enter account holder name: {account_holder_name}")
+            i += 1
 
             # Preliminary check: verify the account holder name exists.
             found_user = None
@@ -416,30 +471,35 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                     break
 
             if found_user is None:
-                print("Error: Account holder name not found.")
+                write_console("Error: Account holder name not found.")
                 continue
 
-            # Now prompt for the account number.
-            account_number = input("Enter account number: ").strip()
+            # Get the account number from the input file.
+            if i >= len(commands):
+                write_console("Error: Missing account number for disable.")
+                errorEnd()
+                break
+            account_number = commands[i]
+            write_console(f"Enter account number: {account_number}")
+            i += 1
 
-            # Create a Disable transaction instance and process it.
-            from disable import Disable
-            disable_txn = Disable(session_type, account_holder_name, account_number, USERS)
-            disable_txn.process_disable()
+            # Create and process the Disable transaction.
+            disable_txn = Disable(session_type, account_holder_name, account_number, USERS, write_console=write_console)
+            result = disable_txn.process_disable()
+            if result != 1:
+                continue  # If disable failed, do not log a transaction output.
 
-            # Log the transaction output if the processing succeeded.
+            # Log the transaction output.
             transaction_output = disable_txn.return_transaction_output()
             if transaction_output:
                 log_transaction(transaction_output)
-
+ 
         elif command == "logout":
-            # Create a Logout transaction instance.
-            logout_txn = Logout(logged_in, session_type, current_user)
+            # Create a Logout transaction instance using current session info, passing write_console.
+            logout_txn = Logout(logged_in, session_type, current_user, write_console=write_console)
             
             # Process logout; if successful, log the transaction and clear session state.
             if logout_txn.process_logout():
-                # transaction_output = logout_txn.return_transaction_output()
-                # log_transaction(transaction_output)
                 out_line = logout_txn.return_transaction_output()
                 log_transaction(out_line)
                 write_console("Session terminated.")
@@ -447,9 +507,10 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 current_user = None
                 session_type = None
 
+
         else:
-            # print("Invalid command.")
-            write_console("Invalid command.")
+            print("Invalid command.")
+            # write_console("Invalid command.")
             
     # Cleanup
     out_file.close()

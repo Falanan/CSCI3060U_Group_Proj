@@ -68,19 +68,78 @@ run_paybill_tests() {
   echo "All PAYBILL tests completed."
 }
 
+##################################
+# Helper: Run CHANGEPLAN tests (07)
+##################################
+run_changeplan_tests() {
+  echo "Running all CHANGEPLAN tests..."
+  # Assuming there are 8 test cases in inputs/07_changeplan_inputs
+  for i in $(seq 1 8); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/07_changeplan_inputs/changeplan${CASE_ID}.inp"
+    # Actual output files are named with a prefix (07_test_) to distinguish from expected ones.
+    OUT_FILE="outputs/07_changeplan_outputs/07_test_${CASE_ID}.out"
+    ETF_FILE="transaction_outputs/07_changeplan_transaction_outputs/07_test_${CASE_ID}.etf"
+    echo "  Running CHANGEPLAN test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+  echo "All CHANGEPLAN tests completed."
+}
+
+##################################
+# Helper: Run DISABLE tests (08)
+##################################
+run_disable_tests() {
+  echo "Running all DISABLE tests..."
+  # Assuming there are 7 test cases in inputs/08_disable_inputs
+  for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/08_disable_inputs/disable${CASE_ID}.inp"
+    OUT_FILE="outputs/08_disable_outputs/08_test_${CASE_ID}.out"
+    ETF_FILE="transaction_outputs/08_disable_transaction_outputs/08_test_${CASE_ID}.etf"
+    echo "  Running DISABLE test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+  echo "All DISABLE tests completed."
+}
+
+##################################
+# Helper: Run LOGOUT tests
+##################################
+run_logout_tests() {
+  echo "Running all LOGOUT tests..."
+  # Assuming there are 10 test cases in inputs/logout_inputs
+  for i in $(seq 1 10); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/logout_inputs/logout${CASE_ID}.inp"
+    OUT_FILE="outputs/logout_outputs/logout_test_${CASE_ID}.out"
+    ETF_FILE="transaction_outputs/logout_transaction_outputs/logout_test_${CASE_ID}.etf"
+    echo "  Running LOGOUT test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+  echo "All LOGOUT tests completed."
+}
+
 ###################
 # DECIDE WHICH TESTS TO RUN
 ###################
 if [[ "$TEST_ID" == "02" ]]; then
   # run only transfer tests
   run_transfer_tests
-
 elif [[ "$TEST_ID" == "03" ]]; then
   # run only paybill tests
   run_paybill_tests
-
+elif [[ "$TEST_ID" == "07" ]]; then
+  run_changeplan_tests
+elif [[ "$TEST_ID" == "08" ]]; then
+  run_disable_tests
+elif [[ "$TEST_ID" == "logout" ]]; then
+  run_logout_tests
 else
   # run all tests
   run_transfer_tests
   run_paybill_tests
+  run_changeplan_tests
+  run_disable_tests
+  run_logout_tests
 fi

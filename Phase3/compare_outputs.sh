@@ -120,6 +120,58 @@ compare_paybill_outputs() {
   done
 }
 
+##################################
+# CHANGEPLAN comparison (07)
+##################################
+compare_changeplan_outputs() {
+  echo ""
+  echo "Comparing CHANGEPLAN outputs..."
+  # For CHANGEPLAN, actual output files have a "07_test_" prefix.
+  for i in $(seq 1 8); do
+    CASE_ID=$(printf "%02d" $i)
+    local actual_out="outputs/07_changeplan_outputs/07_test_${CASE_ID}.out"
+    local actual_etf="transaction_outputs/07_changeplan_transaction_outputs/07_test_${CASE_ID}.etf"
+    local expected_out="outputs/07_changeplan_outputs/changeplan${CASE_ID}.out"
+    local expected_etf="transaction_outputs/07_changeplan_transaction_outputs/changeplan${CASE_ID}.etf"
+    local label="CHANGEPLAN test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
+##################################
+# DISABLE comparison (08)
+##################################
+compare_disable_outputs() {
+  echo ""
+  echo "Comparing DISABLE outputs..."
+  for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+    local actual_out="outputs/08_disable_outputs/08_test_${CASE_ID}.out"
+    local actual_etf="transaction_outputs/08_disable_transaction_outputs/08_test_${CASE_ID}.etf"
+    local expected_out="outputs/08_disable_outputs/disable${CASE_ID}.out"
+    local expected_etf="transaction_outputs/08_disable_transaction_outputs/disable${CASE_ID}.etf"
+    local label="DISABLE test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
+##################################
+# LOGOUT comparison
+##################################
+compare_logout_outputs() {
+  echo ""
+  echo "Comparing LOGOUT outputs..."
+  for i in $(seq 1 10); do
+    CASE_ID=$(printf "%02d" $i)
+    local actual_out="outputs/logout_outputs/logout_test_${CASE_ID}.out"
+    local actual_etf="transaction_outputs/logout_transaction_outputs/logout_test_${CASE_ID}.etf"
+    local expected_out="outputs/logout_outputs/logout${CASE_ID}.out"
+    local expected_etf="transaction_outputs/logout_transaction_outputs/logout${CASE_ID}.etf"
+    local label="LOGOUT test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
 
 ##################################
 # Decide which tests to compare
@@ -128,8 +180,17 @@ if [[ "$TEST_ID" == "02" ]]; then
   compare_transfer_outputs
 elif [[ "$TEST_ID" == "03" ]]; then
   compare_paybill_outputs
+elif [[ "$TEST_ID" == "07" ]]; then
+  compare_changeplan_outputs
+elif [[ "$TEST_ID" == "08" ]]; then
+  compare_disable_outputs
+elif [[ "$TEST_ID" == "logout" ]]; then
+  compare_logout_outputs
 else
   # compare all
   compare_transfer_outputs
   compare_paybill_outputs
+  compare_changeplan_outputs
+  compare_disable_outputs
+  compare_logout_outputs
 fi

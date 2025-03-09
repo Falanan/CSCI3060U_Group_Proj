@@ -60,15 +60,9 @@ class Deposit:
         return transaction_output  # Return this so main.py can log it
 
     def return_transaction_output(self):
-        """
-        Generates a formatted transaction output string for logging purposes.
-        
-        :return: str - Formatted transaction string.
-        """
-        formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
-        transaction_output = (
-            f"04_{formatted_username}_"
-            f"{self.user.account_number:>5}_"
-            f"{float(self.amount):.2f}"
-        )
+        formatted_username = self.user.user_name.replace(" ", "_").ljust(24, "_")
+        formatted_account = f"{self.user.account_number:0>5}"
+        formatted_amount = f"{float(self.amount):0>8.2f}"
+        transaction_output = f"04_{formatted_username}_{formatted_account}_{formatted_amount}__"
         return transaction_output
+

@@ -1,4 +1,6 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Error: Cannot change plan for a disabled account
-Session terminated
+Enter account holder name: Wenbo_Zhang
+Enter account number: 00002
+Error: Account 00002 is disabled. Cannot change plan.
+Session terminated.
