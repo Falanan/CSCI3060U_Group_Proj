@@ -350,44 +350,62 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
         elif command == "deposit":
             if not logged_in or session_type != "admin":
                 write_console("Error: You must be logged in as an admin to deposit into other accounts.")
-                # Consume the next two tokens (if present) that belong to the deposit command.
-                if i + 1 < len(commands):
-                    i += 2
+                continue
+            
+            if commands[i] == "logout":
+                write_console("Error: Missing account holder name.")
                 continue
 
-            # For admin deposits, expect two tokens: account number and deposit amount.
             if i >= len(commands):
-                write_console("Error: Missing account number for deposit.")
-                errorEnd()
+                write_console("Error: Missing account number.")
                 break
-            account_number = commands[i]
-            # (Removed echo of account number to avoid duplicate output)
+            account_holder_name = commands[i].strip()
             i += 1
 
             if i >= len(commands):
-                write_console("Error: Missing deposit amount for deposit.")
-                errorEnd()
-                break
-            token_amount = commands[i]
-            try:
-                deposit_amount = float(token_amount)
-            except ValueError:
-                write_console("Error: Deposit amount must be numeric.")
-                errorEnd()
-                break
-            write_console(f"Enter deposit amount: {deposit_amount}")
+                write_console("Error: Missing account holder name.")
+                continue
+            account_number = commands[i].strip()
             i += 1
 
-            if account_number in USERS:
-                deposit = Deposit(session_type, USERS[account_number], deposit_amount)
-                deposit.process_deposit()
-                transaction_output = deposit.return_transaction_output()
-                log_transaction(transaction_output)
+            if account_number in USERS and USERS[account_number].user_name.strip() == account_holder_name:
+                if i >= len(commands):
+                    write_console("Error: Missing deposit amount.")
+                    break
+
+                if check.invalid_character_check(commands[i]):
+                    deposit_amount = float(commands[i])
+                else:
+                    write_console("Error: Invalid deposit amount. Amount must be numeric.")
+                    errorEnd()
+                    break
+                i += 1
+
+                if deposit_amount > 0:
+                    deposit = Deposit(session_type, USERS[account_number], deposit_amount, write_console)
+                    transaction_output = deposit.process_deposit()
+
+                    if transaction_output:  # Ensuring only successful deposits are logged
+                        log_transaction(transaction_output)
+                else:
+                    write_console("Error: Deposit amount must be greater than zero.")
             else:
-                write_console("Error: Account number not found.")
-
-
-
+                write_console(f"Error: Invalid account number {account_number} for account holder '{account_holder_name}'.")
+        
+        elif command == "create":
+            if not logged_in or session_type != "admin":
+                print("Error: You must be logged in as an admin to deposit into other accounts.")
+                continue
+            create_account = Create(session_type, USERS)
+            create_account.process_creation()
+        
+        elif command == "delete":
+            if not logged_in or session_type != "admin":
+                print("Error: You must be logged in as an admin to delete accounts.")
+                continue
+            
+            delete_account = Delete(session_type, USERS)
+            delete_account.process_deletion()
 
         elif command == "changeplan":
             if not logged_in:

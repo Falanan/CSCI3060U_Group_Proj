@@ -124,6 +124,30 @@ compare_paybill_outputs() {
 }
 
 ##################################
+# DEPOSIT comparison
+##################################
+compare_deposit_outputs() {
+  echo ""
+  echo "Comparing DEPOSIT outputs..."
+
+  # We have 9 test cases
+  for i in $(seq 1 8); do
+    CASE_ID=$(printf "%02d" $i)
+
+    # -- Actual
+    local actual_out="outputs/04_deposit_outputs/04_test_${CASE_ID}.out"
+    local actual_etf="transaction_outputs/04_deposit_transaction_outputs/04_test_${CASE_ID}.etf"
+
+    # -- Expected
+    local expected_out="outputs/04_deposit_outputs/deposit${CASE_ID}.out"
+    local expected_etf="transaction_outputs/04_deposit_transaction_outputs/deposit_${CASE_ID}.etf"
+
+    local label="DEPOSIT test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
+##################################
 # CHANGEPLAN comparison (07)
 ##################################
 compare_changeplan_outputs() {
@@ -183,6 +207,8 @@ if [[ "$TEST_ID" == "02" ]]; then
   compare_transfer_outputs
 elif [[ "$TEST_ID" == "03" ]]; then
   compare_paybill_outputs
+elif [[ "$TEST_ID" == "04" ]]; then
+  compare_deposit_outputs
 elif [[ "$TEST_ID" == "07" ]]; then
   compare_changeplan_outputs
 elif [[ "$TEST_ID" == "08" ]]; then
@@ -193,6 +219,7 @@ else
   # compare all
   compare_transfer_outputs
   compare_paybill_outputs
+  compare_deposit_outputs
   compare_changeplan_outputs
   compare_disable_outputs
   compare_logout_outputs

@@ -4,8 +4,8 @@ deposit
 Elon_Trust
 27182
 1000
-withdrawal
-Elon_Trust
-27182
-1000
+paybill
+27182 
+EC 
+6000
 logout

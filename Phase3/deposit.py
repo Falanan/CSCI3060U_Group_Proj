@@ -2,58 +2,62 @@ from check import Check
 
 class Deposit:
     """
-    This class handles deposit transactions for a user's account.
-    It ensures proper validation of the deposit amount and account status
-    before processing the transaction.
+    Handles deposit transactions for a user's account with input validation.
     """
-    def __init__(self, userType, user, amount=None):
+    def __init__(self, userType, user, amount=None, write_console=None):
         """
-        Initializes the Deposit class with user type, user details, and deposit amount.
+        Initializes the Deposit class with user type, user details, deposit amount, and console output method.
         
         :param userType: str - Specifies whether the user is an 'admin' or a 'user'.
         :param user: User object - Contains user account details.
         :param amount: float (optional) - The amount to be deposited.
+        :param write_console: function (optional) - Function to handle console output.
         """
-        self.userType = userType  # 'admin' or 'user'
-        self.user = user  # User object with account details
-        self.amount = amount  # Amount to be deposited
-        self.check = Check()  # Instance of Check class for validation
+        self.userType = userType
+        self.user = user
+        self.amount = amount
+        self.check = Check()
+        
+        # Provide a default no-op if not given
+        if write_console is None:
+            def _default_console(msg): pass
+            self.write_console = _default_console
+        else:
+            self.write_console = write_console
 
     def process_deposit(self):
-        """
-        Processes the deposit by performing multiple validation checks
-        and updating the user's balance if valid.
-        
-        :return: str - Formatted transaction output if successful, else None.
-        """
         # Validate input fields
         all_inputs_valid, missing_fields = self.check.missing_input_check(
-            user=self.user,
-            amount=self.amount
+            user=self.user, amount=self.amount
         )
         if not all_inputs_valid:
-            print(f"Error: The deposit {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
+            self.write_console(f"Error: The deposit {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
             return
-        
+
         # Validate deposit amount
         if not self.check.invalid_character_check(self.amount):
-            print("Error: Invalid deposit amount. Amount must be numeric.")
+            self.write_console("Error: Invalid deposit amount. Amount must be numeric.")
             return
         if not self.check.negative_amount_check(self.amount):
-            print("Error: Invalid deposit amount. Amount must be positive.")
+            self.write_console("Error: Invalid deposit amount. Amount must be positive.")
             return
         if not self.check.zero_amount_check(self.amount):
-            print("Error: Deposit amount must be greater than zero.")
+            self.write_console("Error: Deposit amount must be greater than zero.")
             return
 
         # Check if the account is active
         if not self.check.availability_check(self.user):
-            print("Error: Account is inactive. Please use an available account.")
+            self.write_console("Error: Account is inactive. Please use an available account.")
             return
 
         # Process the deposit by updating the balance
         self.user.balance += self.amount
-        print(f"Deposit successful. New balance: ${self.user.balance:.2f}")
+
+        if self.user.balance > 10000:
+            self.write_console("Error: Cannot deposit more funds than accounts balance limit of 10000")
+            return
+            
+        self.write_console(f"Deposit successful. Funds unavailable for this session. New balance: ${self.user.balance:.2f}")
 
         # Generate and return transaction log entry
         transaction_output = self.return_transaction_output()
@@ -65,4 +69,3 @@ class Deposit:
         formatted_amount = f"{float(self.amount):0>8.2f}"
         transaction_output = f"04_{formatted_username}_{formatted_account}_{formatted_amount}__"
         return transaction_output
-

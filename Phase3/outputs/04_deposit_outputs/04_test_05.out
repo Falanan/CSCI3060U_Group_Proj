@@ -1,4 +1,4 @@
 Welcome to the banking system.
 Enter session type: admin
-Error: Invalid account number 99999 for account holder 'Elon_Trust'.
+Error: Deposit amount must be greater than zero.
 Session terminated.

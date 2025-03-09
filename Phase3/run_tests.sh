@@ -71,6 +71,30 @@ run_paybill_tests() {
   echo "All PAYBILL tests completed."
 }
 
+run_deposit_tests() {
+  echo "Running all DEPOSIT tests..."
+
+  # We assume 8 test cases named deposit_01.inp ... deposit_08.inp
+  for i in $(seq 1 8); do
+    # zero-pad the test index (01, 02, ..., 12)
+    CASE_ID=$(printf "%02d" $i)
+
+    # Input file
+    INPUT_FILE="inputs/04_deposit_inputs/deposit${CASE_ID}.inp"
+
+    # .out file
+    OUT_FILE="outputs/04_deposit_outputs/04_test_${CASE_ID}.out"
+
+    # .etf file
+    ETF_FILE="transaction_outputs/04_deposit_transaction_outputs/04_test_${CASE_ID}.etf"
+
+    echo "  Running DEPOSIT test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All DEPOSIT tests completed."
+}
+
 ##################################
 # Helper: Run CHANGEPLAN tests (07)
 ##################################
@@ -132,16 +156,21 @@ if [[ "$TEST_ID" == "02" ]]; then
 elif [[ "$TEST_ID" == "03" ]]; then
   # run only paybill tests
   run_paybill_tests
+elif [[ "$TEST_ID" == "04" ]]; then
+  # run only deposit tests
+  run_deposit_tests
 elif [[ "$TEST_ID" == "07" ]]; then
   run_changeplan_tests
 elif [[ "$TEST_ID" == "08" ]]; then
   run_disable_tests
 elif [[ "$TEST_ID" == "logout" ]]; then
   run_logout_tests
+
 else
   # run all tests
   run_transfer_tests
   run_paybill_tests
+  run_deposit_tests
   run_changeplan_tests
   run_disable_tests
   run_logout_tests
