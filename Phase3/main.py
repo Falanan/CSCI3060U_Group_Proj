@@ -527,8 +527,7 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
 
 
         else:
-            print("Invalid command.")
-            # write_console("Invalid command.")
+            pass
             
     # Cleanup
     out_file.close()
