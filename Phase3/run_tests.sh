@@ -19,6 +19,25 @@ ACCOUNTS_FILE="./current_accounts_file.txt"
 # The user can pass "02" for transfer or "03" for paybill, or nothing for all.
 TEST_ID="$1"
 
+
+run_login_tests() {
+  echo "Running all LOGIN tests..."
+
+  # We assume test cases are named login_01.inp ... login_05.inp (adjust the count as needed)
+  for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/00_login_inputs/login${CASE_ID}_input.inp"
+    OUT_FILE="outputs/00_login_outputs/00_login${CASE_ID}_output.out"
+    ETF_FILE="transaction_outputs/00_login_transaction_outputs/login.etf"
+    echo "  Running LOGIN test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All LOGIN tests completed."
+}
+
+
+
 # A small helper function to run transfer tests
 run_transfer_tests() {
   echo "Running all TRANSFER tests..."
@@ -123,7 +142,13 @@ run_logout_tests() {
 ###################
 # DECIDE WHICH TESTS TO RUN
 ###################
-if [[ "$TEST_ID" == "02" ]]; then
+
+
+
+if [[ "$TEST_ID" == "00" ]]; then
+  # run only transfer tests
+  run_login_tests
+elif [[ "$TEST_ID" == "02" ]]; then
   # run only transfer tests
   run_transfer_tests
 elif [[ "$TEST_ID" == "03" ]]; then

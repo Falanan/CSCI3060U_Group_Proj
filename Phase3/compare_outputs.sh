@@ -72,6 +72,27 @@ compare_one_test() {
   fi
 }
 
+
+compare_login_outputs() {
+  echo "Comparing Login outputs..."
+    for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+
+    # -- Actual files
+    local actual_out="outputs/00_login_outputs/00_login${CASE_ID}_output.out"
+    local actual_etf="transaction_outputs/00_login_transaction_outputs/login.etf"
+
+    # -- Expected files
+    local expected_out="outputs/00_login_outputs/login${CASE_ID}_output.out"
+    local expected_etf="transaction_outputs/00_login_transaction_outputs/login.etf"
+
+    # Now compare
+    local label="Login test #$CASE_ID"
+    compare_one_test "$label" "$actual_out" "$expected_out" "$actual_etf" "$expected_etf"
+  done
+}
+
+
 ##################################
 # TRANSFER comparison
 ##################################
@@ -176,7 +197,10 @@ compare_logout_outputs() {
 ##################################
 # Decide which tests to compare
 ##################################
-if [[ "$TEST_ID" == "02" ]]; then
+
+if [[ "$TEST_ID" == "00" ]]; then
+  compare_login_outputs
+elif [[ "$TEST_ID" == "02" ]]; then
   compare_transfer_outputs
 elif [[ "$TEST_ID" == "03" ]]; then
   compare_paybill_outputs

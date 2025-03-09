@@ -148,48 +148,31 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
         current_user = None
         session_type = None
     
-    # while True:
-    #     command = input("Enter command: ").strip().lower()
-        
-    #     if command == "login":
-    #         print("Welcome to the banking system.")
-            
-    #         session_type = input("Enter session type: ").strip().lower()
     
     i = 0
     while i < len(commands):
         command = commands[i].lower()
         i += 1
         
-        # if command == "login":
-        #     print("Welcome to the banking system.")
-            
-        #     session_type = input("Enter session type: ").strip().lower()
         if command == "login":
-            write_console("Welcome to the banking system.")
+            if logged_in:
+                write_console("You have already Login")
+                break
+            write_console("Welcome to the banking system")
             if i >= len(commands):
                 write_console("Error: Missing session type.")
                 break
             session_type = commands[i].lower()
             write_console(f"Enter session type: {session_type}")
             i += 1
-            
+
             if session_type == "admin":
                 login_instance = Login(session_type, None, logged_in)
                 login_instance.process_login()
                 logged_in = True
                 current_user = None
+                write_console("Login_Success")
             else:
-                # account_number = input("Enter account number: ").strip()
-                # found_user = USERS.get(account_number)
-                
-                # if found_user:
-                #     current_user = found_user
-                #     login_instance = Login(session_type, current_user, logged_in)
-                #     login_instance.process_login()
-                #     logged_in = True
-                # else:
-                #     print("Error: Invalid account number.")
                 # standard user
                 if i >= len(commands):
                     write_console("Error: Missing account holder name.")
@@ -200,17 +183,16 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 # find a user with that name
                 found_user = None
                 for u in USERS.values():
-                    # compare ignoring underscores vs. user_name that may have underscores
-                    # or do a direct match if you keep underscores
                     if u.user_name.lower() == entered_name.lower():
                         found_user = u
-                        write_console(f"Enter account holder name: {entered_name}")
+                        write_console(f"Enter username: {entered_name}")
                         break
                 if found_user:
                     login_instance = Login(session_type, found_user, logged_in)
                     login_instance.process_login()
                     logged_in = True
                     current_user = found_user
+                    write_console("Login_Success")
                 else:
                     write_console("Error: Invalid account holder name.")
         
