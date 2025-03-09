@@ -1,5 +1,5 @@
 Welcome to the banking system.
 Enter session type: standard
 Enter account holder name: Xuan_Zheng
-Error: The paybill amount is missing, so the process will be rejected. Please re-try.
+Error: Payment amount must be greater than zero.
 Session terminated.

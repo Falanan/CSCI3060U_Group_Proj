@@ -38,14 +38,17 @@ class Paybill:
     def process_paybill(self):
         """ Processes the bill payment after performing necessary validations. """
         # Basic checks
-        all_inputs_valid, missing_fields = self.check.missing_input_check(
-            user=self.user, 
-            company=self.company, 
-            amount=self.amount
-        )
-        if not all_inputs_valid:
-            self.write_console(f"Error: The paybill {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
+        if not self.check.zero_amount_check(self.amount):
+            self.write_console("Error: Payment amount must be greater than zero.")
             return 0
+        # all_inputs_valid, missing_fields = self.check.missing_input_check(
+        #     user=self.user, 
+        #     company=self.company, 
+        #     amount=self.amount
+        # )
+        # if not all_inputs_valid:
+        #     self.write_console(f"Error: The paybill {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
+        #     return 0
         
         if not self.check.invalid_character_check(self.amount):
             self.write_console("Error: Invalid payment amount. Amount must be numeric.")
@@ -67,9 +70,9 @@ class Paybill:
                 self.write_console("Error: Invalid payment amount. Amount must be positive.")
                 return 0
             
-            if not self.check.zero_amount_check(self.amount):
-                self.write_console("Error: Payment amount must be greater than zero.")
-                return 0
+            # if not self.check.zero_amount_check(self.amount):
+            #     self.write_console("Error: Payment amount must be greater than zero.")
+            #     return 0
             
             if not self.check.balance_check(self.user, self.amount):
                 self.write_console(f"Error: Insufficient funds to pay the bill. Available balance: ${self.user.balance:,.2f}")
@@ -93,9 +96,9 @@ class Paybill:
             if not self.check.negative_amount_check(self.amount):
                 self.write_console("Error: Invalid payment amount. Amount must be positive.")
                 return 0
-            if not self.check.zero_amount_check(self.amount):
-                self.write_console("Error: Payment amount must be greater than zero.")
-                return 0
+            # if not self.check.zero_amount_check(self.amount):
+            #     self.write_console("Error: Payment amount must be greater than zero.")
+            #     return 0
             if not self.check.limit_check(self.amount, self.limit):
                 self.write_console(f"Error: Maximum paybill limit exceeded. You can paybill up to ${self.limit:.2f} in this session.")
                 return 0

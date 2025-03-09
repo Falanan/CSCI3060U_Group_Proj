@@ -1,5 +1,5 @@
 Welcome to the banking system.
 Enter session type: standard
 Enter account holder name: Xuan_Zheng
-Error: Invalid transfer amount. Amount must be numeric.
+Error: Missing required fields for transfer. Please provide both source and destination account numbers and the amount.
 Session terminated.

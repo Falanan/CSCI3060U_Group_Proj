@@ -131,7 +131,7 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
         Write transaction lines to the .etf file.
         """
         etf_file.write(txn_str + "\n")
-
+    
     # read commands from the commands_file
     with open(commands_file, "r") as cf:
         commands = [line.strip() for line in cf if line.strip()]
@@ -140,6 +140,13 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
     current_user = None
     session_type = None
     check = Check()
+    
+    def errorEnd():
+        write_console("Session terminated.")
+        log_transaction("00_________________________00000_00000.00__")
+        logged_in = False
+        current_user = None
+        session_type = None
     
     # while True:
     #     command = input("Enter command: ").strip().lower()
@@ -238,8 +245,15 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 write_console("Error: You must be logged in first.")
                 continue
             
-            if i + 2 >= len(commands):
-                write_console("Error: Missing arguments for transfer.")
+            # Sanity Check
+            if session_type == "admin":
+                if 7 > len(commands):
+                    write_console("Error: Missing required fields for transfer. Please provide both source and destination account numbers and the amount.")
+                    errorEnd()
+                    break  
+            elif 8 > len(commands):
+                write_console("Error: Missing required fields for transfer. Please provide both source and destination account numbers and the amount.")
+                errorEnd()
                 break
             sender_account = commands[i]
             receiver_account = commands[i+1]
@@ -249,16 +263,13 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 amount = float(commands[i])
             else:
                 write_console("Error: Invalid transfer amount. Amount must be numeric.")
-                write_console("Session terminated.")
-                log_transaction("00_________________________00000_00000.00__")
+                errorEnd()
                 break
             i += 1
             
             if session_type == "admin" or (current_user and check.sender_account_match(current_user, sender_account)):
-                # if receiver_account in USERS and receiver_account != sender_account:
                 if receiver_account in USERS:
                     transfer = Transfer(session_type, USERS[sender_account], USERS[receiver_account], amount, write_console=write_console)
-                    # transfer.process_transfer()
                     # Write transaction output to log file
                     # transaction_output = transfer.return_transaction_output()
                     # log_transaction(transaction_output)
@@ -278,10 +289,17 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             if not logged_in:
                 write_console("Error: You must be logged in first.")
                 continue
-            # sender acct, company code, amount
-            if i + 2 >= len(commands):
-                write_console("Error: Missing arguments for paybill.")
+            # Sanity Check
+            if session_type == "admin":
+                if 7 > len(commands):
+                    write_console("Error: The paybill argument is missing, so the process will be rejected. Please re-try.")
+                    errorEnd()
+                    break  
+            elif 8 > len(commands):
+                write_console("Error: The paybill argument is missing, so the process will be rejected. Please re-try.")
+                errorEnd()
                 break
+            # sender acct, company code, amount
             sender_account = commands[i]
             company = commands[i+1]
             i += 2
@@ -290,8 +308,7 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 amount = float(commands[i])
             else:
                 write_console("Error: Invalid payment amount. Amount must be numeric.")
-                write_console("Session terminated.")
-                log_transaction("00_________________________00000_00000.00__")
+                errorEnd()
                 break
             i += 1
             
@@ -436,7 +453,7 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             
     # Cleanup
     out_file.close()
-    etf_file.close()        
+    etf_file.close()      
 
 if __name__ == "__main__":
     # banking_system()

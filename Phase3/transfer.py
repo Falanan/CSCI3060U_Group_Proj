@@ -32,15 +32,20 @@ class Transfer:
     def process_transfer(self):
         # Processes the fund transfer after performing necessary validations.
         
-        # Check for missing inputs
-        all_inputs_valid, missing_fields = self.check.missing_input_check(
-            user1=self.user1,
-            user2=self.user2,
-            amount=self.amount
-        )
-        if not all_inputs_valid:
-            self.write_console(f"Error: The transfer {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
+        if not self.check.zero_amount_check(self.amount):
+            # print("Error: Transfer amount must be greater than zero.")
+            self.write_console("Error: Transfer amount must be greater than zero.")
             return 0
+            
+        # Check for missing inputs
+        # all_inputs_valid, missing_fields = self.check.missing_input_check(
+        #     user1=self.user1,
+        #     user2=self.user2,
+        #     amount=self.amount
+        # )
+        # if not all_inputs_valid:
+        #     self.write_console(f"Error: The transfer {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
+        #     return 0
         
         # Basic checks that should always run
         if not self.check.account_existence_check(self.user2):
@@ -58,10 +63,10 @@ class Transfer:
                 # print("Error: Invalid transfer amount. Amount must be positive.")
                 self.write_console("Error: Invalid transfer amount. Amount must be positive.")
                 return 0
-            if not self.check.zero_amount_check(self.amount):
-                # print("Error: Transfer amount must be greater than zero.")
-                self.write_console("Error: Transfer amount must be greater than zero.")
-                return 0
+            # if not self.check.zero_amount_check(self.amount):
+            #     # print("Error: Transfer amount must be greater than zero.")
+            #     self.write_console("Error: Transfer amount must be greater than zero.")
+            #     return 0
             if not self.check.balance_check(self.user1, self.amount):
                 # print(f"Error: Insufficient funds for transfer.")
                 self.write_console("Error: Insufficient funds for transfer.")
@@ -99,9 +104,9 @@ class Transfer:
             if not self.check.negative_amount_check(self.amount):
                 self.write_console("Error: Invalid transfer amount.")
                 return 0
-            if not self.check.zero_amount_check(self.amount):
-                self.write_console("Error: Transfer amount must be greater than zero.")
-                return 0
+            # if not self.check.zero_amount_check(self.amount):
+            #     self.write_console("Error: Transfer amount must be greater than zero.")
+            #     return 0
             if not self.check.balance_check(self.user1, self.amount):
                 self.write_console("Error: Insufficient funds for transfer.")
                 return 0
