@@ -233,17 +233,11 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             log_transaction(withdrawal_output)
         
         elif command == "transfer":
-            # if not logged_in:
-            #     print("Error: You must be logged in to perform transactions.")
-            #     continue
             
-            # sender_account = input("Enter sender account number: ").strip()
-            # receiver_account = input("Enter target account number: ").strip()
-            # amount = float(input("Enter transfer amount: "))
             if not logged_in:
                 write_console("Error: You must be logged in first.")
                 continue
-            # expect next lines: sender acct, receiver acct, amount
+            
             if i + 2 >= len(commands):
                 write_console("Error: Missing arguments for transfer.")
                 break
@@ -251,45 +245,40 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             receiver_account = commands[i+1]
             i += 2
 
-            try:
+            if check.invalid_character_check(commands[i]):
                 amount = float(commands[i])
-            except (ValueError, IndexError):
-                write_console("Error: Invalid or missing transfer amount.")
+            else:
+                write_console("Error: Invalid transfer amount. Amount must be numeric.")
+                write_console("Session terminated.")
+                log_transaction("00_________________________00000_00000.00__")
                 break
             i += 1
             
             if session_type == "admin" or (current_user and check.sender_account_match(current_user, sender_account)):
-                if receiver_account in USERS and receiver_account != sender_account:
+                # if receiver_account in USERS and receiver_account != sender_account:
+                if receiver_account in USERS:
                     transfer = Transfer(session_type, USERS[sender_account], USERS[receiver_account], amount, write_console=write_console)
-                    transfer.process_transfer()
+                    # transfer.process_transfer()
                     # Write transaction output to log file
                     # transaction_output = transfer.return_transaction_output()
                     # log_transaction(transaction_output)
                     # Then log the .etf lines:
-                    txn_out = transfer.return_transaction_output()
-                    for line in txn_out.splitlines():
-                        log_transaction(line)
-            #     else:
-            #         print("Error: Invalid target account number.")
-            # else:
-            #     print("Error: Unauthorized transfer. You can only transfer from accounts you own.")
+                    if 0!=transfer.process_transfer():
+                        txn_out = transfer.return_transaction_output()
+                        for line in txn_out.splitlines():
+                            log_transaction(line)
+           
                 else:
-                    write_console("Error: Invalid target account number.")
+                    write_console("Error: Target account does not exist.")
             else:
                 write_console("Error: Unauthorized transfer. You can only transfer from accounts you own.")
         
         elif command == "paybill":
-            # if not logged_in:
-            #     print("Error: You must be logged in to perform transactions.")
-            #     continue
-            
-            # sender_account = input("Enter sender account number: ").strip()
-            # company = input("Enter company code (EC, CQ, FI): ").strip().upper()
-            # amount = float(input("Enter bill amount: "))
+
             if not logged_in:
                 write_console("Error: You must be logged in first.")
                 continue
-            # expect: sender acct, company code, amount
+            # sender acct, company code, amount
             if i + 2 >= len(commands):
                 write_console("Error: Missing arguments for paybill.")
                 break
@@ -297,29 +286,24 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             company = commands[i+1]
             i += 2
 
-            try:
+            if check.invalid_character_check(commands[i]):
                 amount = float(commands[i])
-            except (ValueError, IndexError):
-                write_console("Error: Invalid or missing bill amount.")
+            else:
+                write_console("Error: Invalid payment amount. Amount must be numeric.")
+                write_console("Session terminated.")
+                log_transaction("00_________________________00000_00000.00__")
                 break
             i += 1
             
             if session_type == "admin" or (current_user and check.sender_account_match(current_user, sender_account)):
                 paybill = Paybill(session_type, USERS[sender_account], company, amount, write_console=write_console)
-                paybill.process_paybill()
-                # Write transaction output to log file
-                # company_id = paybill.check.company_id_check(company)
-                # transaction_output = paybill.return_transaction_output(company_id)
-                # log_transaction(transaction_output)
-                c_id = paybill.check.company_id_check(company)
-                if c_id:
-                        out_str = paybill.return_transaction_output(c_id)
-                        for line in out_str.splitlines():
-                            log_transaction(line)
+                if 0!= paybill.process_paybill():
+                    c_id = paybill.check.company_id_check(company)
+                    if c_id:
+                            out_str = paybill.return_transaction_output(c_id)
+                            for line in out_str.splitlines():
+                                log_transaction(line)
                 
-                
-            # else:
-            #     print("Error: You must be logged in as a standard user to pay bills.")
             else:
                 write_console("Error: You must be logged in as a standard user to pay bills.")
         

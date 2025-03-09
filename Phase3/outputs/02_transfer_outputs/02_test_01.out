@@ -1,5 +1,5 @@
 Welcome to the banking system.
-Enter session type: standard.
-Enter account holder name: Xuan_Zheng.
+Enter session type: standard
+Enter account holder name: Xuan_Zheng
 Transfer successful. New balance: $900.00 (Account 00003), $2,700.00 (Account 00006).
 Session terminated.

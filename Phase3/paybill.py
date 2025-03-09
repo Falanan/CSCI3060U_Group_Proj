@@ -44,43 +44,36 @@ class Paybill:
             amount=self.amount
         )
         if not all_inputs_valid:
-            # print(f"Error: The paybill {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
             self.write_console(f"Error: The paybill {', '.join(missing_fields)} is missing, so the process will be rejected. Please re-try.")
-            return
+            return 0
         
         if not self.check.invalid_character_check(self.amount):
-            # print("Error: Invalid payment amount. Amount must be numeric.")
             self.write_console("Error: Invalid payment amount. Amount must be numeric.")
-            return
+            return 0
         
         if not self.check.valid_company_check(self.company):
-            # print(f"Error: '{self.company}' is not a recognized biller. Please use EC, CQ, or FI.")
             self.write_console(f"Error: '{self.company}' is not a recognized biller. Please use EC, CQ, or FI.")
-            return
+            return 0
         
         company_id = self.check.company_id_check(self.company)
         if not company_id:
-            # print("Error: No valid company ID found for the selected biller.")
             self.write_console("Error: No valid company ID found for the selected biller.")
-            return
+            return 0
 
         # If user is admin, skip paybill limit & ownership checks, but still do negative/zero/funds checks
         if self.userType == "admin":
             # Admin override
             if not self.check.negative_amount_check(self.amount):
-                # print("Error: Invalid payment amount. Amount must be positive.")
                 self.write_console("Error: Invalid payment amount. Amount must be positive.")
-                return
+                return 0
             
             if not self.check.zero_amount_check(self.amount):
-                # print("Error: Payment amount must be greater than zero.")
                 self.write_console("Error: Payment amount must be greater than zero.")
-                return
+                return 0
             
             if not self.check.balance_check(self.user, self.amount):
-                # print(f"Insufficient funds to pay the bill. Available balance: ${self.user.balance}.")
                 self.write_console(f"Error: Insufficient funds to pay the bill. Available balance: ${self.user.balance:,.2f}")
-                return
+                return 0
 
             # Assume admin able to pay from disabled accounts
             # if not self.check.availability_check(self.user):
@@ -88,79 +81,39 @@ class Paybill:
             #     return
 
             self.user.balance -= self.amount
-            # print(f"Payment successful. New balance for Account {self.user.account_number}: ${self.user.balance:.2f} .")
-            # self.display_transaction_output(company_id)
             self.write_console(
                 f"Payment successful. New balance for Account {self.user.account_number}: "
-                f"${self.user.balance:,.2f}."
+                f"${self.user.balance:.2f}."
             )
-            return
-
         # Standard user checks
-        # if not self.check.availability_check(self.user):
-        #     print("Error: Your account is disabled. Please use an available account to paybill.")
-        #     return
-        # if not self.check.negative_amount_check(self.amount):
-        #     print("Error: Invalid payment amount. Amount must be positive.")
-        #     return
-        # if not self.check.zero_amount_check(self.amount):
-        #     print("Error: Payment amount must be greater than zero.")
-        #     return
-        # if not self.check.limit_check(self.amount, self.limit):
-        #     print(f"Error: Maximum bill payment limit exceeded. You can pay up to ${self.limit:.2f} in this session.")
-        #     return
-        # if not self.check.balance_check(self.user, self.amount):
-        #     print(f"Insufficient funds to pay the bill. Available balance: ${self.user.balance}.")
-        #     return
-        # if not self.company_check():
-        #     print("Error: Biller not recognized. Please use EC, CQ, or FI.")
-        #     return
-
-        # # Process standard paybill
-        # self.user.balance -= self.amount
-        # print(f"Payment successful. New balance for Account {self.user.account_number}: ${self.user.balance:.2f} .")
-        # self.display_transaction_output(company_id)
-        if not self.check.availability_check(self.user):
+        else:
+            if not self.check.availability_check(self.user):
                 self.write_console("Error: Your account is disabled. Please use an available account to paybill.")
-                return
-        if not self.check.negative_amount_check(self.amount):
-            self.write_console("Error: Invalid payment amount. Amount must be positive.")
-            return
-        if not self.check.zero_amount_check(self.amount):
-            self.write_console("Error: Payment amount must be greater than zero.")
-            return
-        if not self.check.limit_check(self.amount, self.limit):
-            self.write_console(f"Error: Maximum bill payment limit exceeded. You can pay up to ${self.limit:.2f} in this session.")
-            return
-        if not self.check.balance_check(self.user, self.amount):
-            self.write_console(f"Insufficient funds to pay the bill. Available balance: ${self.user.balance}.")
-            return
-        if not self.company_check():
-            self.write_console("Error: Biller not recognized. Please use EC, CQ, or FI.")
-            return
+                return 0
+            if not self.check.negative_amount_check(self.amount):
+                self.write_console("Error: Invalid payment amount. Amount must be positive.")
+                return 0
+            if not self.check.zero_amount_check(self.amount):
+                self.write_console("Error: Payment amount must be greater than zero.")
+                return 0
+            if not self.check.limit_check(self.amount, self.limit):
+                self.write_console(f"Error: Maximum paybill limit exceeded. You can paybill up to ${self.limit:.2f} in this session.")
+                return 0
+            if not self.check.balance_check(self.user, self.amount):
+                self.write_console(f"Error: Insufficient funds to pay the bill. Available balance: ${self.user.balance:.2f}.")
+                return 0
+            if not self.company_check():
+                self.write_console(f"Error: Biller not recognized. Please use EC, CQ, or FI.")
+                return 0
 
-        self.user.balance -= self.amount
-        self.write_console(
-            f"Payment successful. New balance for Account {self.user.account_number}: "
-            f"${self.user.balance:,.2f}."
-        )
+            self.user.balance -= self.amount
+            self.write_console(
+                f"Payment successful. New balance: "
+                f"${self.user.balance:.2f}."
+            )
 
     def company_check(self):
         return self.company in self.COMPANY_ACCOUNTS
-
-    # def display_transaction_output(self, company_id):
-    #     """ Displays the formatted transaction output for logging. """
-    #     formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
-    #     transaction_output = (
-    #         f"03_{formatted_username}_"
-    #         f"{self.user.account_number:>5}_"
-    #         f"{float(self.amount):.2f}_"
-    #         f"{company_id}"
-    #     )
-    #     end_session_output = "00_________________________00000_00000.00__" 
-
-    #     print(transaction_output)
-    #     print(end_session_output)
     
     def return_transaction_output(self, company_id):
         """ Returns the formatted transaction output for logging. """

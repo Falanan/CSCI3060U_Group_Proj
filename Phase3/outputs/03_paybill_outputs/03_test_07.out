@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: standard
+Enter account holder name: Jeremy_Bradbury
+Error: Your account is disabled. Please use an available account to paybill.
+Session terminated.
