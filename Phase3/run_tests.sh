@@ -224,10 +224,10 @@ run_logout_tests() {
 
 
 if [[ "$TEST_ID" == "00" ]]; then
-  # run only transfer tests
+  # run only login tests
   run_login_tests
 elif [[ "$TEST_ID" == "01" ]]; then
-  # run only transfer tests
+  # run only withdrawal tests
   run_withdrawal_test
 elif [[ "$TEST_ID" == "02" ]]; then
   # run only transfer tests
