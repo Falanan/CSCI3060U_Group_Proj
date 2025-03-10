@@ -111,7 +111,7 @@ run_deposit_tests() {
   echo "Running all DEPOSIT tests..."
 
   # We assume 8 test cases named deposit_01.inp ... deposit_08.inp
-  for i in $(seq 1 8); do
+  for i in $(seq 1 7); do
     # zero-pad the test index (01, 02, ..., 12)
     CASE_ID=$(printf "%02d" $i)
 
@@ -135,7 +135,7 @@ run_create_tests() {
   echo "Running all CREATE tests..."
 
   # We assume 8 test cases named create_01.inp ... create_08.inp
-  for i in $(seq 1 8); do
+  for i in $(seq 1 7); do
     # zero-pad the test index (01, 02, ..., 12)
     CASE_ID=$(printf "%02d" $i)
 

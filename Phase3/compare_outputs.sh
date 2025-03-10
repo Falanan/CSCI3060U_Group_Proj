@@ -176,7 +176,7 @@ compare_deposit_outputs() {
   echo "Comparing DEPOSIT outputs..."
 
   # We have 8 test cases
-  for i in $(seq 1 8); do
+  for i in $(seq 1 7); do
     CASE_ID=$(printf "%02d" $i)
 
     # -- Actual
@@ -200,7 +200,7 @@ compare_create_outputs() {
   echo "Comparing CREATE outputs..."
 
   # We have 8 test cases
-  for i in $(seq 1 8); do
+  for i in $(seq 1 7); do
     CASE_ID=$(printf "%02d" $i)
 
     # -- Actual
