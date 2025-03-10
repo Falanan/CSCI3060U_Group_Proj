@@ -1,4 +1,4 @@
-Welcome to the banking system.
+Welcome to the banking system
 Enter session type: admin
 Enter account holder name: Non_Existent_Name
 Error: Account holder name not found.

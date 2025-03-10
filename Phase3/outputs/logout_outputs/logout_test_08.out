@@ -1,5 +1,5 @@
-Welcome to the banking system.
+Welcome to the banking system
 Enter session type: standard
-Enter account holder name: Dev_Thaker
+Enter username: Dev_Thaker
 Error: You must be logged in as an admin to deposit into other accounts.
 Session terminated.

@@ -1,4 +1,4 @@
-Welcome to the banking system.
+Welcome to the banking system
 Enter session type: admin
 Error: Invalid initial balance. Amount must be numeric.
 Session terminated.

@@ -1,5 +1,4 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Login_Success
 Enter account holder name: Non_Existent_Name
 Error: Invalid account holder name

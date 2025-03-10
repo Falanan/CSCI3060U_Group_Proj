@@ -158,7 +158,7 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             if logged_in:
                 write_console("You have already Login")
                 break
-            write_console("Welcome to the banking system")
+            write_console("Welcome to the banking system.")
             if i >= len(commands):
                 write_console("Error: Missing session type.")
                 break
@@ -171,7 +171,7 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 login_instance.process_login()
                 logged_in = True
                 current_user = None
-                write_console("Login_Success")
+                # write_console("Login_Success")
             else:
                 # standard user
                 if i >= len(commands):
@@ -185,14 +185,14 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 for u in USERS.values():
                     if u.user_name.lower() == entered_name.lower():
                         found_user = u
-                        write_console(f"Enter username: {entered_name}")
+                        write_console(f"Enter account holder name: {entered_name}")
                         break
                 if found_user:
                     login_instance = Login(session_type, found_user, logged_in)
                     login_instance.process_login()
                     logged_in = True
                     current_user = found_user
-                    write_console("Login_Success")
+                    # write_console("Login_Success")
                 else:
                     write_console("Error: Invalid account holder name.")
 
