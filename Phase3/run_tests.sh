@@ -25,8 +25,6 @@ TEST_ID="$1"
 
 run_login_tests() {
   echo "Running all LOGIN tests..."
-
-  # We assume test cases are named login_01.inp ... login_05.inp (adjust the count as needed)
   for i in $(seq 1 7); do
     CASE_ID=$(printf "%02d" $i)
     INPUT_FILE="inputs/00_login_inputs/login${CASE_ID}_input.inp"
@@ -42,8 +40,6 @@ run_login_tests() {
 
 run_withdrawal_test() {
   echo "Running all WITHDRAWAL tests..."
-
-  # We assume test cases are named login_01.inp ... login_05.inp (adjust the count as needed)
   for i in $(seq 1 7); do
     CASE_ID=$(printf "%02d" $i)
     INPUT_FILE="inputs/01_withdrawal_inputs/withdrawal${CASE_ID}_input.inp"
@@ -61,8 +57,6 @@ run_withdrawal_test() {
 # A small helper function to run transfer tests
 run_transfer_tests() {
   echo "Running all TRANSFER tests..."
-
-  # We assume 12 test cases named transfer_01.inp ... transfer_12.inp
   for i in $(seq 1 12); do
     # zero-pad the test index (01, 02, ..., 12)
     CASE_ID=$(printf "%02d" $i)
@@ -87,7 +81,6 @@ run_transfer_tests() {
 run_paybill_tests() {
   echo "Running all PAYBILL tests..."
 
-  # We assume 9 test cases named paybill_01.inp ... paybill_09.inp
   for i in $(seq 1 9); do
     CASE_ID=$(printf "%02d" $i)
 
@@ -110,7 +103,6 @@ run_paybill_tests() {
 run_deposit_tests() {
   echo "Running all DEPOSIT tests..."
 
-  # We assume 8 test cases named deposit_01.inp ... deposit_08.inp
   for i in $(seq 1 7); do
     # zero-pad the test index (01, 02, ..., 12)
     CASE_ID=$(printf "%02d" $i)
@@ -134,7 +126,6 @@ run_deposit_tests() {
 run_create_tests() {
   echo "Running all CREATE tests..."
 
-  # We assume 8 test cases named create_01.inp ... create_08.inp
   for i in $(seq 1 7); do
     # zero-pad the test index (01, 02, ..., 12)
     CASE_ID=$(printf "%02d" $i)
@@ -157,8 +148,6 @@ run_create_tests() {
 
 run_delete_tests() {
   echo "Running all DELETE tests..."
-
-  # We assume 8 test cases named delete_01.inp ... delete_08.inp
   for i in $(seq 1 8); do
     # zero-pad the test index (01, 02, ..., 12)
     CASE_ID=$(printf "%02d" $i)
@@ -184,7 +173,6 @@ run_delete_tests() {
 ##################################
 run_changeplan_tests() {
   echo "Running all CHANGEPLAN tests..."
-  # Assuming there are 8 test cases in inputs/07_changeplan_inputs
   for i in $(seq 1 8); do
     CASE_ID=$(printf "%02d" $i)
     INPUT_FILE="inputs/07_changeplan_inputs/changeplan${CASE_ID}.inp"
@@ -202,7 +190,6 @@ run_changeplan_tests() {
 ##################################
 run_disable_tests() {
   echo "Running all DISABLE tests..."
-  # Assuming there are 7 test cases in inputs/08_disable_inputs
   for i in $(seq 1 7); do
     CASE_ID=$(printf "%02d" $i)
     INPUT_FILE="inputs/08_disable_inputs/disable${CASE_ID}.inp"
@@ -219,7 +206,6 @@ run_disable_tests() {
 ##################################
 run_logout_tests() {
   echo "Running all LOGOUT tests..."
-  # Assuming there are 10 test cases in inputs/logout_inputs
   for i in $(seq 1 10); do
     CASE_ID=$(printf "%02d" $i)
     INPUT_FILE="inputs/logout_inputs/logout${CASE_ID}.inp"
