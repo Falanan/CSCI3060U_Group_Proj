@@ -2,4 +2,4 @@
 *.DS_Store
 Phase2/daily_transaction_file.txt
 /Phase2/__pycache__
-/Phase3/__pycache__
+*.pyc

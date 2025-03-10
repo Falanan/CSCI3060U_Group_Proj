@@ -2,5 +2,4 @@ Welcome to the banking system
 Enter session type: standard
 Enter username: Xuan_Zheng
 Login_Success
-Enter account holder name: 00002
-Error: Invalid account holder name
+You have already Login

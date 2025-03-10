@@ -22,6 +22,42 @@ ACCOUNTS_FILE="./current_accounts_file.txt"
 # The user can pass "02" for transfer or "03" for paybill, or nothing for all.
 TEST_ID="$1"
 
+
+run_login_tests() {
+  echo "Running all LOGIN tests..."
+
+  # We assume test cases are named login_01.inp ... login_05.inp (adjust the count as needed)
+  for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/00_login_inputs/login${CASE_ID}_input.inp"
+    OUT_FILE="outputs/00_login_outputs/00_login${CASE_ID}_output.out"
+    ETF_FILE="transaction_outputs/00_login_transaction_outputs/login.etf"
+    echo "  Running LOGIN test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All LOGIN tests completed."
+}
+
+
+run_withdrawal_test() {
+  echo "Running all WITHDRAWAL tests..."
+
+  # We assume test cases are named login_01.inp ... login_05.inp (adjust the count as needed)
+  for i in $(seq 1 7); do
+    CASE_ID=$(printf "%02d" $i)
+    INPUT_FILE="inputs/01_withdrawal_inputs/withdrawal${CASE_ID}_input.inp"
+    OUT_FILE="outputs/01_withdrawal_outputs/withdrawal${CASE_ID}_test_output.out"
+    ETF_FILE="transaction_outputs/01_withdrawal_transaction_outputs/withdrawal_test_${CASE_ID}.etf"
+    # transaction_outputs/01_withdrawal_transaction_outputs/withdrawal_test_${CASE_ID}.etf
+    echo "  Running WITHDRAWAL test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All WITHDRAWAL tests completed."
+}
+
+
 # A small helper function to run transfer tests
 run_transfer_tests() {
   echo "Running all TRANSFER tests..."
@@ -174,7 +210,16 @@ run_logout_tests() {
 ###################
 # DECIDE WHICH TESTS TO RUN
 ###################
-if [[ "$TEST_ID" == "02" ]]; then
+
+
+
+if [[ "$TEST_ID" == "00" ]]; then
+  # run only transfer tests
+  run_login_tests
+elif [[ "$TEST_ID" == "01" ]]; then
+  # run only transfer tests
+  run_withdrawal_test
+elif [[ "$TEST_ID" == "02" ]]; then
   # run only transfer tests
   run_transfer_tests
 elif [[ "$TEST_ID" == "03" ]]; then
@@ -195,6 +240,8 @@ elif [[ "$TEST_ID" == "logout" ]]; then
 
 else
   # run all tests
+  run_login_tests
+  run_withdrawal_test
   run_transfer_tests
   run_paybill_tests
   run_deposit_tests
