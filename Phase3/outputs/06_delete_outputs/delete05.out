@@ -1,4 +1,5 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Error: Account Number Required.
-Session terminated
+Enter account holder name: Elon_Trust
+Error: Account number cannot be blank.
+Session terminated.

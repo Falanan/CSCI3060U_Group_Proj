@@ -1,5 +1,5 @@
 Welcome to the banking system.
 Enter session type: admin
 Enter account holder name: Elon_Trust
-Enter account number: logout
-Error: No account found for Elon_Trust with account number logout.
+Error: Account number cannot be blank.
+Session terminated.

@@ -1,4 +1,4 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Error: Account Holder Name Required.
-Session terminated
+Error: Account holder name cannot be blank.
+Session terminated.

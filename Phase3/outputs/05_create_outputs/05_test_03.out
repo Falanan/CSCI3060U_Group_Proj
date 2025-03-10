@@ -1,4 +1,4 @@
 Welcome to the banking system.
 Enter session type: admin
-Error: Invalid initial balance. Amount must be numeric.
+Error: Initial balance cannot be blank.
 Session terminated.
