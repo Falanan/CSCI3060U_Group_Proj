@@ -1,5 +1,5 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: standard
-Enter username: Dev_Thaker
+Enter account holder name: Dev_Thaker
 Error: This is a privileged transaction that requires admin mode.
 Session terminated.

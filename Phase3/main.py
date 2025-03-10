@@ -196,6 +196,82 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 else:
                     write_console("Error: Invalid account holder name.")
 
+        # elif command == "withdraw":
+        #     # Default log string used for any error case.
+        #     default_log = "00_________________________00000_00000.00__"
+            
+        #     if not logged_in:
+        #         write_console("Error: You must be logged in to withdraw.")
+        #         log_transaction(default_log)
+        #         continue
+
+        #     # Read account holder name from tokens
+        #     if i >= len(commands):
+        #         write_console("Error: Missing account holder name for withdrawal.")
+        #         log_transaction(default_log)
+        #         break
+        #     entered_name = commands[i]
+        #     write_console(f"Enter account holder name: {entered_name}")
+        #     i += 1
+
+        #     # Locate the user from the USERS dictionary
+        #     found_user = None
+        #     for u in USERS.values():
+        #         if u.user_name.lower() == entered_name.lower():
+        #             found_user = u
+        #             break
+        #     if not found_user:
+        #         write_console("Error: Invalid account holder name")
+        #         log_transaction(default_log)
+        #         continue
+
+        #     # Read the provided account number
+        #     if i >= len(commands):
+        #         write_console("Error: Missing account number for withdrawal.")
+        #         log_transaction(default_log)
+        #         break
+        #     provided_account = commands[i]
+        #     i += 1
+        #     # Display the actual account number from the found user.
+        #     write_console(f"Enter account name: {found_user.account_number}")
+        #     if provided_account != found_user.account_number:
+        #         if session_type == "admin":
+        #             write_console("Error: Invalid account number")
+        #         else:
+        #             write_console("Error: Wrong account number")
+        #         log_transaction(default_log)
+        #         continue
+
+        #     # Read the withdrawal amount
+        #     if i >= len(commands):
+        #         write_console("Error: Missing withdrawal amount.")
+        #         log_transaction(default_log)
+        #         break
+        #     amount_str = commands[i]
+        #     write_console(f"Enter Withdrawal amount: {amount_str}")
+        #     i += 1
+        #     try:
+        #         amount = float(amount_str)
+        #     except ValueError:
+        #         write_console("Error: Invalid withdrawal amount.")
+        #         log_transaction(default_log)
+        #         continue
+
+        #     # Check if withdrawal would result in negative balance.
+        #     if amount > found_user.balance:
+        #         write_console("Error: Account balance less than 0")
+        #         log_transaction(default_log)
+        #         continue
+        #     else:
+        #         write_console("Withdrawal success")
+
+
+        #     # Process the withdrawal and log the transaction output.
+        #     withdrawal_instance = Withdrawal(found_user, amount)
+        #     withdrawal_instance.process_withdrawal()
+        #     withdrawal_output = withdrawal_instance.return_transaction_output()
+        #     log_transaction(withdrawal_output)
+
         elif command == "withdraw":
             # Default log string used for any error case.
             default_log = "00_________________________00000_00000.00__"
@@ -205,42 +281,61 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 log_transaction(default_log)
                 continue
 
-            # Read account holder name from tokens
-            if i >= len(commands):
-                write_console("Error: Missing account holder name for withdrawal.")
-                log_transaction(default_log)
-                break
-            entered_name = commands[i]
-            write_console(f"Enter account holder name: {entered_name}")
-            i += 1
-
-            # Locate the user from the USERS dictionary
-            found_user = None
-            for u in USERS.values():
-                if u.user_name.lower() == entered_name.lower():
-                    found_user = u
+            # Branch based on session type
+            if session_type == "admin":
+                # For admin, read account holder name and then account number.
+                if i >= len(commands):
+                    write_console("Error: Missing account holder name for withdrawal.")
+                    log_transaction(default_log)
                     break
-            if not found_user:
-                write_console("Error: Invalid account holder name")
-                log_transaction(default_log)
-                continue
+                entered_name = commands[i]
+                write_console(f"Enter account holder name: {entered_name}")
+                i += 1
 
-            # Read the provided account number
-            if i >= len(commands):
-                write_console("Error: Missing account number for withdrawal.")
-                log_transaction(default_log)
-                break
-            provided_account = commands[i]
-            i += 1
-            # Display the actual account number from the found user.
-            write_console(f"Enter account name: {found_user.account_number}")
-            if provided_account != found_user.account_number:
-                if session_type == "admin":
+                found_user = None
+                for u in USERS.values():
+                    if u.user_name.lower() == entered_name.lower():
+                        found_user = u
+                        break
+                if not found_user:
+                    write_console("Error: Invalid account holder name")
+                    log_transaction(default_log)
+                    continue
+
+                if i >= len(commands):
+                    write_console("Error: Missing account number for withdrawal.")
+                    log_transaction(default_log)
+                    break
+                provided_account = commands[i]
+                i += 1
+                write_console(f"Enter account name: {found_user.account_number}")
+                if provided_account != found_user.account_number:
                     write_console("Error: Invalid account number")
-                else:
+                    log_transaction(default_log)
+                    continue
+
+                user_for_withdraw = found_user
+
+            else:  # standard session
+                # current_user is already set via login; just verify the account number.
+                if current_user is None:
+                    write_console("Error: No user logged in.")
+                    log_transaction(default_log)
+                    continue
+
+                if i >= len(commands):
+                    write_console("Error: Missing account number for withdrawal.")
+                    log_transaction(default_log)
+                    break
+                provided_account = commands[i]
+                i += 1
+                write_console(f"Enter account name: {current_user.account_number}")
+                if provided_account != current_user.account_number:
                     write_console("Error: Wrong account number")
-                log_transaction(default_log)
-                continue
+                    log_transaction(default_log)
+                    continue
+
+                user_for_withdraw = current_user
 
             # Read the withdrawal amount
             if i >= len(commands):
@@ -257,20 +352,19 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
                 log_transaction(default_log)
                 continue
 
-            # Check if withdrawal would result in negative balance.
-            if amount > found_user.balance:
+            # Check if withdrawal amount exceeds current balance.
+            if amount > user_for_withdraw.balance:
                 write_console("Error: Account balance less than 0")
                 log_transaction(default_log)
                 continue
             else:
                 write_console("Withdrawal success")
+                # Process the withdrawal and log the transaction output.
+                withdrawal_instance = Withdrawal(user_for_withdraw, amount)
+                withdrawal_instance.process_withdrawal()
+                withdrawal_output = withdrawal_instance.return_transaction_output()
+                log_transaction(withdrawal_output)
 
-
-            # Process the withdrawal and log the transaction output.
-            withdrawal_instance = Withdrawal(found_user, amount)
-            withdrawal_instance.process_withdrawal()
-            withdrawal_output = withdrawal_instance.return_transaction_output()
-            log_transaction(withdrawal_output)
 
 
 

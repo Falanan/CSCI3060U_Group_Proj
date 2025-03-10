@@ -82,7 +82,7 @@ class Withdrawal:
         """
         formatted_username = self.user.user_name.replace(" ", "_").ljust(21, "_")
         transaction_output = (
-            f"02_{formatted_username}_"
+            f"01_{formatted_username}_"
             f"{self.user.account_number:>5}_"
             f"{float(self.amount):.2f}"
         )
