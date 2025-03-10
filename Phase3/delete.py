@@ -6,21 +6,29 @@ class Delete:
     Only administrators are allowed to delete accounts.
     """
 
-    def __init__(self, userType, accounts, transaction_file="daily_transaction_file.txt"):
+    def __init__(self, userType, accounts, write_console=None, transaction_file="daily_transaction_file.txt"):
         """
         Initializes the Delete class.
 
         Parameters:
         - userType (str): Specifies whether the user is an 'admin' or 'user'.
         - accounts (dict): Dictionary containing existing accounts.
+        - write_console (function): Function to write to the console (default: print).
         - transaction_file (str): File where transactions are logged (default: "daily_transaction_file.txt").
         """
-        self.userType = userType  # Role of the user performing the deletion
-        self.accounts = accounts  # Dictionary of accounts (account_number -> account object)
-        self.transaction_file = transaction_file  # File to log transactions
-        self.check = Check()  # Instance of Check class for validation purposes
+        self.userType = userType
+        self.accounts = accounts
+        self.write_console = write_console
+        self.transaction_file = transaction_file
+        self.check = Check()
 
-    def process_deletion(self):
+        if write_console is None:
+            def _default_console(msg): pass
+            self.write_console = _default_console
+        else:
+            self.write_console = write_console
+
+    def process_deletion(self, account_holder_name, account_number):
         """
         Handles the account deletion process.
 
@@ -31,40 +39,29 @@ class Delete:
         4. If valid, logs the deletion transaction and removes the account.
         """
 
-        # Ensure only admins can delete accounts
         if self.userType != "admin":
-            print("Error: Only admins can delete accounts.")
-            return
+            self.write_console("Error: Only admins can delete accounts.")
+            return None
 
-        # Ask for the account holder's name
-        account_holder = input("Enter the account holder's name: ").strip()
-        
-        # Ask for the account number
-        account_number = input("Enter the account number: ").strip()
-        
-        # Validate input
-        if not account_holder:
-            print("Error: Account holder name cannot be empty.")
-            return
+        if not account_holder_name:
+            self.write_console("Error: Account holder name cannot be empty.")
+            return None
 
-        # Check if the account exists and matches the provided account holder's name
         account_found = None
-        if account_number in self.accounts and self.accounts[account_number].user_name.strip() == account_holder:
+        if account_number in self.accounts and self.accounts[account_number].user_name.strip() == account_holder_name:
             account_found = self.accounts[account_number]
-        
-        # If no matching account is found, print an error message
-        if not account_found:
-            print(f"Error: No account found for {account_holder} with account number {account_number}.")
-            return
 
-        # Save the deletion transaction to the file
+        if not account_found:
+            self.write_console(f"Error: No account found for {account_holder_name} with account number {account_number}.")
+            return None
+
         transaction_output = self.return_transaction_output(account_found)
         self.log_transaction(transaction_output)
 
-        # Remove the account from the dictionary
         del self.accounts[account_number]
 
-        print(f"Account with account number {account_number} has been deleted successfully.")
+        self.write_console(f"Account with account number {account_number} has been deleted successfully.")
+        return transaction_output
 
     def return_transaction_output(self, deleted_account):
         """
@@ -77,14 +74,12 @@ class Delete:
         - str: A formatted transaction string representing the deletion.
         """
 
-        # Format the username for consistent length and format
         formatted_username = deleted_account.user_name.replace(" ", "_").ljust(21, "_")
 
-        # Format the transaction output according to the required format
         transaction_output = (
             f"06_{formatted_username}_"
             f"{deleted_account.account_number:>5}_"
-            f"00000.00__"  # Zero balance since the account is deleted
+            f"00000.00__"
         )
         return transaction_output
 
@@ -96,6 +91,5 @@ class Delete:
         - transaction_output (str): The formatted transaction string to be recorded.
         """
 
-        # Append the transaction details to the transaction log file
         with open(self.transaction_file, "a") as file:
             file.write(transaction_output + "\n")

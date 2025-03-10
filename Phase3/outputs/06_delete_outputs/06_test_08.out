@@ -3,4 +3,5 @@ Enter session type: admin
 Enter account holder name: Elon_Trust
 Enter account number: 27182
 Account with account number 27182 has been deleted successfully.
+Error: Invalid account number 27182 for account holder 'Elon_Trust'.
 Session terminated.

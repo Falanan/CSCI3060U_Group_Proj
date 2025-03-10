@@ -454,28 +454,6 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
             else:
                 write_console("Error: You must be logged in as a standard user to pay bills.")
         
-        # elif command == "deposit":
-        #     if not logged_in or session_type != "admin":
-        #         print("Error: You must be logged in as an admin to deposit into other accounts.")
-        #         continue
-
-        #     account_number = input("Enter account number: ").strip()
-        #     account_holder_name = input("Enter account holder name: ").strip()
-
-        #     if account_number in USERS and USERS[account_number].user_name.strip() == account_holder_name:
-        #         deposit_amount = float(input("Enter deposit amount: "))
-                
-        #         if deposit_amount > 0:
-        #             deposit = Deposit(session_type, USERS[account_number], deposit_amount)
-        #             deposit.process_deposit()
-        #             # Log transaction
-        #             transaction_output = deposit.return_transaction_output()
-        #             log_transaction(transaction_output)
-        #         else:
-        #             print("Error: Deposit amount must be greater than zero.")
-        #     else:
-        #         print("Error: Account number and holder name do not match.")
-        
 
         elif command == "deposit":
             if not logged_in or session_type != "admin":
@@ -555,11 +533,33 @@ def banking_system(accounts_file, commands_file, console_out_file, etf_file_path
         
         elif command == "delete":
             if not logged_in or session_type != "admin":
-                print("Error: You must be logged in as an admin to delete accounts.")
+                write_console("Error: You must be logged in as an admin to delete accounts.")
                 continue
-            
-            delete_account = Delete(session_type, USERS)
-            delete_account.process_deletion()
+
+            # Get the account holder name from the input file.
+            if i >= len(commands):
+                write_console("Error: Missing account holder name for delete.")
+                errorEnd()
+                break
+            account_holder_name = commands[i]
+            write_console(f"Enter account holder name: {account_holder_name}")
+            i += 1
+
+            # Get the account number from the input file.
+            if i >= len(commands):
+                write_console("Error: Missing account number for delete.")
+                errorEnd()
+                break
+            account_number = commands[i]
+            write_console(f"Enter account number: {account_number}")
+            i += 1
+
+            # Create and process the Delete transaction.
+            delete_account = Delete(session_type, USERS, write_console=write_console)
+            transaction_output=delete_account.process_deletion(account_holder_name, account_number)
+            if transaction_output:  # Ensure only successful creations are logged
+                    log_transaction(transaction_output)
+
 
         elif command == "changeplan":
             if not logged_in:

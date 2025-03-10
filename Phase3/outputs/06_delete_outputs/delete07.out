@@ -1,4 +1,9 @@
-Welcome to the banking system
+Welcome to the banking system.
 Enter session type: admin
-Error: Account has already been deleted.
-Session terminated
+Enter account holder name: Elon_Trust
+Enter account number: 27182
+Account with account number 27182 has been deleted successfully.
+Enter account holder name: Elon_Trust
+Enter account number: 27182
+Error: No account found for Elon_Trust with account number 27182.
+Session terminated.

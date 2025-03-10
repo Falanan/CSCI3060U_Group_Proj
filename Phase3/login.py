@@ -68,7 +68,6 @@ class Login:
         if self.userType == "standard" and not self.check_username():
             return
         
-        print("Login_Success")
     #     return self.return_transaction_output()
     
     # def return_transaction_output(self):

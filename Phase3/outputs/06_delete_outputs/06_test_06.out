@@ -1,0 +1,5 @@
+Welcome to the banking system.
+Enter session type: admin
+Enter account holder name: 27182
+Enter account number: logout
+Error: No account found for 27182 with account number logout.

@@ -155,6 +155,30 @@ run_create_tests() {
   echo "All CREATE tests completed."
 }
 
+run_delete_tests() {
+  echo "Running all DELETE tests..."
+
+  # We assume 8 test cases named delete_01.inp ... delete_08.inp
+  for i in $(seq 1 8); do
+    # zero-pad the test index (01, 02, ..., 12)
+    CASE_ID=$(printf "%02d" $i)
+
+    # Input file
+    INPUT_FILE="inputs/06_delete_inputs/delete${CASE_ID}.inp"
+
+    # .out file
+    OUT_FILE="outputs/06_delete_outputs/06_test_${CASE_ID}.out"
+
+    # .etf file
+    ETF_FILE="transaction_outputs/06_delete_transaction_outputs/06_test_${CASE_ID}.etf"
+
+    echo "  Running DELETE test #$CASE_ID..."
+    python3 "$PYTHON_SCRIPT" "$ACCOUNTS_FILE" "$INPUT_FILE" "$OUT_FILE" "$ETF_FILE"
+  done
+
+  echo "All DELETE tests completed."
+}
+
 ##################################
 # Helper: Run CHANGEPLAN tests (07)
 ##################################
@@ -231,6 +255,9 @@ elif [[ "$TEST_ID" == "04" ]]; then
 elif [[ "$TEST_ID" == "05" ]]; then
   # run only create tests
   run_create_tests
+elif [[ "$TEST_ID" == "06" ]]; then
+  # run only delete tests
+  run_delete_tests
 elif [[ "$TEST_ID" == "07" ]]; then
   run_changeplan_tests
 elif [[ "$TEST_ID" == "08" ]]; then
@@ -246,6 +273,7 @@ else
   run_paybill_tests
   run_deposit_tests
   run_create_tests
+  run_delete_tests
   run_changeplan_tests
   run_disable_tests
   run_logout_tests
